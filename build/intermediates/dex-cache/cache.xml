@@ -2,39 +2,39 @@
 <items version="2" >
 
     <item
-        jar="/root/AndroidStudioProjects/WhatDidUSay/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
-        <dex dex="/root/AndroidStudioProjects/WhatDidUSay/app/build/intermediates/pre-dexed/debug/classes-6206b8897fe18ca856b706716ddc766bdc1c61af.jar" />
-    </item>
-    <item
-        jar="/root/AndroidStudioProjects/WhatDidUSay/app/build/intermediates/exploded-aar/WhatDidUSay/libraryy_2/unspecified/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="f3425d6f0132373bb95aac91f8ab18c88edd0bb3">
-        <dex dex="/root/AndroidStudioProjects/WhatDidUSay/app/build/intermediates/pre-dexed/debug/classes-9abe87c3a479db0434958d1a9163a397357f7dee.jar" />
-    </item>
-    <item
-        jar="/root/AndroidStudioProjects/WhatDidUSay/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/libs/internal_impl-22.2.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
-        <dex dex="/root/AndroidStudioProjects/WhatDidUSay/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1-72f2f3eb4ccee0f38e39884392f0890ee8d9e8b7.jar" />
-    </item>
-    <item
-        jar="/root/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
-        <dex dex="/root/AndroidStudioProjects/WhatDidUSay/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1-d1acf46021f20f049c52e8e8d2eef24d273c7976.jar" />
-    </item>
-    <item
-        jar="/root/AndroidStudioProjects/WhatDidUSay/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/classes.jar"
+        jar="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="f8efd0096475e0daf054267b61544e10dc776503">
-        <dex dex="/root/AndroidStudioProjects/WhatDidUSay/app/build/intermediates/pre-dexed/debug/classes-81887a9060ad308bf0a63aaf8cbb529c9cadfbfc.jar" />
+        <dex dex="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/classes-bb9e4bc681a6c046b44a2cbb121092f2764f63a3.jar" />
+    </item>
+    <item
+        jar="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/WhatDidUSay_Android/libraryy_2/unspecified/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="dcf1b0d1119e2922d1dde7770bb5db71d02d9a65">
+        <dex dex="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/classes-a287c03247b25336564b6cd19574e5c45d91c8f0.jar" />
+    </item>
+    <item
+        jar="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
+        <dex dex="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/classes-1499ecb6ebe5e475c5b9b00b2cdbff21edfe90f8.jar" />
+    </item>
+    <item
+        jar="/home/dottechnologies/Desktop/ADT-NEW/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1-0c9954c9c7007a48f8b0ce58a578e1e0bb073266.jar" />
+    </item>
+    <item
+        jar="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/libs/internal_impl-22.2.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1-7badb199361208ac6cee921088f83c1e6e771e44.jar" />
     </item>
 
 </items>

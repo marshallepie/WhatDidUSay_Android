@@ -120,7 +120,7 @@ public class Home_Fragment extends Fragment {
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
-            return 8;
+            return 15;
         }
 
         @Override

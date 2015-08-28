@@ -3,6 +3,7 @@ package com.example.root.whatdidusay;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -27,11 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SliderActivity extends SlidingFragmentActivity{
+public class SliderActivity extends SlidingFragmentActivity {
 
-    String[] titlearr = { "Home", "Info", "Settings" };
+    String[] titlearr = {"Home", "Info", "Settings"};
 
-    int[] icons = { R.drawable.home, R.drawable.info, R.drawable.settings };
+    int[] icons = {R.drawable.home, R.drawable.info, R.drawable.settings};
     static FragmentActivity act;
     RelativeLayout menu;
     ListView listviewMenu;
@@ -49,6 +50,7 @@ public class SliderActivity extends SlidingFragmentActivity{
     public static List<myFragmentsclass> myFragents = new ArrayList<myFragmentsclass>();
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +62,13 @@ public class SliderActivity extends SlidingFragmentActivity{
 
         act = SliderActivity.this;
 
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+            View decorView = getWindow().getDecorView();
+
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
+
        /* avalon_regular = Typeface.createFromAsset(act.getAssets(),
                 "avalon-plain.ttf");
 
@@ -68,7 +77,7 @@ public class SliderActivity extends SlidingFragmentActivity{
 
         slider_btn = (ImageView) findViewById(R.id.slider_btn);
         wdys_text = (TextView) findViewById(R.id.wdys_text);
-      //  wdys_text.setTypeface(avalon_bold);
+        //  wdys_text.setTypeface(avalon_bold);
         edit_btn = (ImageView) findViewById(R.id.edit_btn);
 
         slider_btn.setOnClickListener(new View.OnClickListener() {

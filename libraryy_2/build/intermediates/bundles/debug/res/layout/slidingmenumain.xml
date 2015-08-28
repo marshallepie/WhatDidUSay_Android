@@ -2,4 +2,4 @@
 <com.jeremyfeinstein.slidingmenu.lib.SlidingMenu xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/slidingmenumain"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" /><!-- From: file:/root/AndroidStudioProjects/WhatDidUSay/libraryy_2/src/main/res/layout/slidingmenumain.xml -->
+    android:layout_height="fill_parent" /><!-- From: file:/media/dottechnologies/DATA1/What%20Did%20u%20say/WhatDidUSay_Android/libraryy_2/src/main/res/layout/slidingmenumain.xml -->

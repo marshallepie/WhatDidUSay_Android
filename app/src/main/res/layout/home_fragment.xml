@@ -1,52 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/bg"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        >
+
 
         <ListView
             android:id="@+id/tracklist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/rel_threebtns" >
+            android:layout_above="@+id/layoutButtons">
+
         </ListView>
 
-        <RelativeLayout
-            android:id="@+id/rel_threebtns"
-            android:layout_width="360dp"
+        <LinearLayout
+            android:id="@+id/layoutButtons"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/timer_text"
-            android:layout_centerHorizontal="true"
 
-            android:layout_marginBottom="5dp" >
 
-            <ImageView
-                android:id="@+id/play_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/play_green" />
+            android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/play_btn"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/rec_start_btn" />
+
+
 
             <ImageView
                 android:id="@+id/record_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/record" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:src="@drawable/rec_btn" />
+
+
 
             <ImageView
                 android:id="@+id/stop_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/stop_blue" />
-        </RelativeLayout>
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:src="@drawable/rec_stop_btn" />
+
+
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/timer_text"
@@ -56,8 +61,15 @@
             android:layout_centerInParent="true"
             android:layout_marginBottom="20dp"
             android:text="00:00"
+            android:visibility="gone"
             android:textColor="#e9e9e9"
             android:textSize="40sp" />
-    </RelativeLayout>
+
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>
