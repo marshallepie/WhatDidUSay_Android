@@ -73,6 +73,7 @@ public class Home_Fragment extends Fragment {
         record_btn = (ImageView) view.findViewById(R.id.record_btn);
         stop_btn = (ImageView) view.findViewById(R.id.stop_btn);
 
+
         timer_text = (TextView) view.findViewById(R.id.timer_text);
        // timer_text.setTypeface(avalon_regular);
 
