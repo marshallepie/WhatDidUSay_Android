@@ -1,8 +1,12 @@
 package com.example.root.whatdidusay;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 
 /**
  * Created by lalit vasan on 31/8/15.
@@ -54,5 +58,47 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_CONTACT_TABLE);
         onCreate(db);
 
+    }
+
+    public void addRecord(ModelRecording record) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_RECORD_NAME, record.getName());
+        values.put(KEY_RECORD_DATE, record.getDate());
+        values.put(KEY_RECORD_TIME,record.getTime());
+        values.put(KEY_RECORD_DURATION,record.getDuration());
+        values.put(KEY_RECORD_PATH,record.getPath());
+
+        db.insert(TABLE_RECORDINGS, null, values);
+        db.close();
+    }
+
+    public ArrayList<ModelRecording> getAllRecords() {
+        ArrayList<ModelRecording> recordtList = new ArrayList<ModelRecording>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_RECORDINGS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                ModelRecording record = new ModelRecording();
+                record.setId(cursor.getString(cursor.getColumnIndex(KEY_ID)));
+                record.setName(cursor.getString(cursor.getColumnIndex(KEY_RECORD_NAME)));
+                record.setDate(cursor.getString(cursor.getColumnIndex(KEY_RECORD_DATE)));
+                record.setTime(cursor.getString(cursor.getColumnIndex(KEY_RECORD_TIME)));
+                record.setPath(cursor.getString(cursor.getColumnIndex(KEY_RECORD_PATH)));
+                record.setIsForDelete(false);
+                record.setIsPlaying(false);
+
+                recordtList.add(record);
+            } while (cursor.moveToNext());
+        }
+
+
+        return recordtList;
     }
 }

@@ -18,22 +18,45 @@ public class RecordingHelpers {
     private MediaRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
 
+    private final String TEMP_FOLDER = "";
+    private final String mainDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
+            + ".What_did_you_say";
+    private final String tempDir = mainDir+File.separator+"Temp";
 
     public RecordingHelpers() {
+        File dirFile = new File(mainDir);
+        File tempDirFile = new File(tempDir);
+        if (!dirFile.exists()){
+            dirFile.mkdirs();
+        }
+        if (!tempDirFile.exists()){
+            tempDirFile.mkdirs();
+        }
 
     }
 
-    public String generateFileName() {
+    public String generateFilePath() {
         String mFileName;
-        mFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
-                + ".What_did_you_say"+File.separator + System.currentTimeMillis() + ".3gp";
+        mFileName = mainDir +File.separator + System.currentTimeMillis() + ".3gp";
 
 
         return mFileName;
     }
 
+    public String getTempFilePath(){
+        String mFileName;
+        mFileName = tempDir +File.separator+"temp.3gp";
 
-    private void startRecording(String mFileName) {
+
+        return mFileName;
+
+
+    }
+
+
+
+
+    public void startRecording(String mFileName) {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -46,17 +69,18 @@ public class RecordingHelpers {
             Log.e(LOG_TAG, "prepare() failed");
         }
 
+
         mRecorder.start();
     }
 
-    private void stopRecording() {
+    public void stopRecording() {
         mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
     }
 
 
-    private void startPlaying(String mFileName) {
+    public void startPlaying(String mFileName) {
         mPlayer = new MediaPlayer();
         try {
             mPlayer.setDataSource(mFileName);
@@ -67,9 +91,53 @@ public class RecordingHelpers {
         }
     }
 
-    private void stopPlaying() {
+    public void stopPlaying() {
         mPlayer.release();
         mPlayer = null;
+    }
+
+    public void moveIn (String pathInternal, String pathExternal) {
+        File fInternal = new File (pathInternal);
+        File fExternal = new File (pathExternal);
+        if (fInternal.exists()) {
+            fInternal.renameTo(fExternal);
+        }
+    }
+
+    public  void copyFile(String sourceFilePath, String destFilePath) throws IOException {
+
+        File oldFile = new File (sourceFilePath);
+        File newFile = new File(destFilePath);
+        oldFile.renameTo(newFile);
+
+
+/*
+        File sourceFile = new File(sourceFilePath);
+        File destFile = new File(destFilePath);
+
+        if(!destFile.exists()) {
+            destFile.createNewFile();
+        }
+
+        FileChannel source = null;
+        FileChannel destination = null;
+        try {
+            source = new RandomAccessFile(sourceFile,"rw").getChannel();
+            destination = new RandomAccessFile(destFile,"rw").getChannel();
+
+            long position = 0;
+            long count    = source.size();
+
+            source.transferTo(position, count, destination);
+        }
+        finally {
+            if(source != null) {
+                source.close();
+            }
+            if(destination != null) {
+                destination.close();
+            }
+        }*/
     }
 
 

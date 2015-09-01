@@ -35,7 +35,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
 
-            android:src="@drawable/edit_btn" />
+            android:src="@drawable/delete" />
     </RelativeLayout>
 
     <FrameLayout

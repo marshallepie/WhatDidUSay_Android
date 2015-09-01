@@ -8,34 +8,38 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by dottechnologies on 31/8/15.
  */
-public class AdapterRecording extends BaseAdapter{
+public class AdapterRecording extends BaseAdapter {
 
     private LayoutInflater inflater = null;
     private View previousView;
 
-    private  Context con;
+    private Context con;
+    private ArrayList<ModelRecording> mList;
 
-    public AdapterRecording(Context c){
+    public AdapterRecording(Context c, ArrayList<ModelRecording> list) {
         inflater = LayoutInflater.from(c);
+        mList = list;
 
     }
 
     @Override
     public int getCount() {
-        return 15;
+        return mList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return position;
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override

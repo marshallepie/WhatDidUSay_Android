@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity{
     private void initObjects() {
         recordingHelpers = new RecordingHelpers();
 
-        mListView.setAdapter(new AdapterRecording(MainActivity.this));
+       // mListView.setAdapter(new AdapterRecording(MainActivity.this));
 
     }
 

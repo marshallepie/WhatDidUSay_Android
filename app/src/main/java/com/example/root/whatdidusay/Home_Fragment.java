@@ -1,23 +1,21 @@
 package com.example.root.whatdidusay;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Typeface;
-import android.media.MediaPlayer;
-import android.media.MediaRecorder;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 
 /**
  * Created by root on 21/8/15.
@@ -25,16 +23,21 @@ import java.io.IOException;
 public class Home_Fragment extends Fragment {
     private static View view;
     static Activity act;
-    ListView tracklist;
-    ImageView play_btn;
-    ImageView record_btn;
-    ImageView stop_btn;
-    TextView timer_text;
-    Typeface avalon_regular, avalon_bold;
-    TrackList_Adapter adapter;
-    private MediaRecorder myRecorder;
-    private MediaPlayer myPlayer;
-    private String outputFile = null;
+
+
+    private ListView mListView;
+    private ImageView play_btn;
+    private ImageView record_btn;
+    private ImageView stop_btn;
+    private ProgressBar progressBar;
+    private TextView textEmpty;
+    private RecordingHelpers recordingHelpers;
+    private ArrayList<ModelRecording> listRecords;
+    private DataBaseHelper db;
+    private Handler handler;
+    private Runnable runnable;
+    private String tempFilePath ;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +45,7 @@ public class Home_Fragment extends Fragment {
         view = inflater.inflate(R.layout.home_fragment, container, false);
         act = getActivity();
 
-        getuicontrols();
+
 
       /*  avalon_regular = Typeface.createFromAsset(act.getAssets(),
                 "avalon-plain.ttf");
@@ -50,123 +53,138 @@ public class Home_Fragment extends Fragment {
         avalon_bold = Typeface.createFromAsset(act.getAssets(),
                 "Avalon Bold.ttf");*/
 
-        adapter = new TrackList_Adapter(act);
-        tracklist.setAdapter(adapter);
+        initViews(view);
+        initObjects();
+        initListners();
 
-        outputFile = Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + "/javacodegeeksRecording.3gpp";
 
-        myRecorder = new MediaRecorder();
-        myRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        myRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        myRecorder.setOutputFile(outputFile);
+
 
         return view;
 
     }
 
-    private void getuicontrols() {
-        tracklist = (ListView) view.findViewById(R.id.tracklist);
-
-        play_btn = (ImageView) view.findViewById(R.id.play_btn);
-        record_btn = (ImageView) view.findViewById(R.id.record_btn);
-        stop_btn = (ImageView) view.findViewById(R.id.stop_btn);
 
 
-        timer_text = (TextView) view.findViewById(R.id.timer_text);
-       // timer_text.setTypeface(avalon_regular);
+    private void initViews(View v) {
+        mListView = (ListView) v.findViewById(R.id.tracklist);
+        play_btn = (ImageView) v.findViewById(R.id.play_btn);
+        record_btn = (ImageView) v.findViewById(R.id.record_btn);
+        stop_btn = (ImageView) v.findViewById(R.id.stop_btn);
+        progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        textEmpty = (TextView) v.findViewById(R.id.textEmpty);
+        record_btn.setAlpha(0.5f);
+        stop_btn.setAlpha(0.5f);
+
+
+
+
+    }
+
+    private void initObjects() {
+        recordingHelpers = new RecordingHelpers();
+        db = new DataBaseHelper(getActivity());
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                recordingHelpers.stopRecording();
+                recordingHelpers.startRecording(tempFilePath);
+
+            }
+        };
+
+        tempFilePath = recordingHelpers.getTempFilePath();
+
+        new FetchDataBase().execute();
+
+    }
+
+    private void initListners() {
 
         play_btn.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                start(v);
+                play_btn.setAlpha(0.5f);
+                record_btn.setAlpha(1.0f);
+                stop_btn.setAlpha(1.0f);
+                play_btn.setEnabled(false);
+
+              //  recordingHelpers.startRecording(tempFilePath);
+
+
             }
         });
+        record_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+
+
+            }
+        });
+        stop_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                play_btn.setAlpha(1.0f);
+                record_btn.setAlpha(0.5f);
+                stop_btn.setAlpha(0.5f);
+                play_btn.setEnabled(true);
+             //   recordingHelpers.stopRecording();
+
+
+            }
+        });
     }
 
-    public void start(View view) {
-        try {
-            myRecorder.prepare();
-            myRecorder.start();
-        } catch (IllegalStateException e) {
-            // start:it is called before prepare()
-            // prepare: it is called after start() or before setOutputFormat()
-            e.printStackTrace();
-        } catch (IOException e) {
-            // prepare() fails
-            e.printStackTrace();
+    private class RecordTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                recordingHelpers.stopRecording();
+                recordingHelpers.copyFile(tempFilePath, recordingHelpers.generateFilePath());
+                recordingHelpers.startRecording(recordingHelpers.getTempFilePath());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
         }
-
-        play_btn.setEnabled(false);
-        record_btn.setEnabled(true);
-        stop_btn.setEnabled(true);
-
-       // Toast.makeText(act, "Start recording...", Toast.LENGTH_SHORT).show();
     }
 
-    private class TrackList_Adapter extends BaseAdapter {
-        private LayoutInflater inflater = null;
-        private View previousView;
 
-        Context con;
 
-        public TrackList_Adapter(Context c) {
-            inflater = LayoutInflater.from(c);
+    private class FetchDataBase extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(ProgressBar.VISIBLE);
+            textEmpty.setVisibility(TextView.GONE);
+            listRecords = null;
+            listRecords = new ArrayList<ModelRecording>();
+
+
         }
 
         @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return 15;
+        protected Void doInBackground(Void... params) {
+            listRecords = db.getAllRecords();
+
+            return null;
         }
 
         @Override
-        public Object getItem(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        private class SettingHolder {
-            ImageView play_tracklist_btn;
-            TextView title_tracklist, date_text, time_text, record_time;
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            textEmpty.setVisibility(TextView.VISIBLE);
+            mListView.setAdapter(new AdapterRecording(act, listRecords));
+            mListView.setEmptyView(textEmpty);
+            progressBar.setVisibility(ProgressBar.GONE);
 
         }
-
-        @SuppressLint("ViewHolder")
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            View v = convertView;
-
-            final SettingHolder holder;
-            holder = new SettingHolder();
-
-            v = inflater.inflate(R.layout.track_list_custom, null);
-
-            holder.play_tracklist_btn = (ImageView) v
-                    .findViewById(R.id.play_tracklist_btn);
-            holder.title_tracklist = (TextView) v
-                    .findViewById(R.id.title_tracklist);
-          //  holder.title_tracklist.setTypeface(avalon_bold);
-            holder.date_text = (TextView) v.findViewById(R.id.date_text);
-         //   holder.date_text.setTypeface(avalon_regular);
-            holder.time_text = (TextView) v.findViewById(R.id.time_text);
-          //  holder.time_text.setTypeface(avalon_regular);
-            holder.record_time = (TextView) v.findViewById(R.id.record_time);
-         //   holder.record_time.setTypeface(avalon_regular);
-
-            return v;
-        }
-
     }
 }

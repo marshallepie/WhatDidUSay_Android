@@ -48,7 +48,7 @@ public class SliderActivity extends SlidingFragmentActivity {
     Typeface avalon_regular, avalon_bold;
 
     public static List<myFragmentsclass> myFragents = new ArrayList<myFragmentsclass>();
-
+    private Prefrences prefs;
 
 
     @Override
@@ -69,6 +69,13 @@ public class SliderActivity extends SlidingFragmentActivity {
             decorView.setSystemUiVisibility(uiOptions);
         }
 
+        prefs = new Prefrences(getApplicationContext());
+        if (!prefs.getContains(Prefrences.KEY_PREFRENCE_INIT))
+        {
+            prefs.setBooleanPrefs(Prefrences.KEY_PREFRENCE_INIT,true);
+            prefs.setIntPrefs(Prefrences.KEY_PREFRENCE_INIT,10);
+        }
+
        /* avalon_regular = Typeface.createFromAsset(act.getAssets(),
                 "avalon-plain.ttf");
 
@@ -87,6 +94,12 @@ public class SliderActivity extends SlidingFragmentActivity {
                 // TODO Auto-generated method stub
 
                 showMenu();
+
+            }
+        });
+        edit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
