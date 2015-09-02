@@ -4,9 +4,14 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import static com.example.root.whatdidusay.R.drawable.play_btn;
 
 /**
  * Created by dottechnologies on 31/8/15.
@@ -22,6 +27,8 @@ public class RecordingHelpers {
     private final String mainDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
             + ".What_did_you_say";
     private final String tempDir = mainDir+File.separator+"Temp";
+    private long startTime;
+
 
     public RecordingHelpers() {
         File dirFile = new File(mainDir);
@@ -47,13 +54,10 @@ public class RecordingHelpers {
         String mFileName;
         mFileName = tempDir +File.separator+"temp.3gp";
 
-
         return mFileName;
 
 
     }
-
-
 
 
     public void startRecording(String mFileName) {
@@ -80,12 +84,18 @@ public class RecordingHelpers {
     }
 
 
-    public void startPlaying(String mFileName) {
+    public void startPlaying(String mFileName, final ImageView playImage) {
         mPlayer = new MediaPlayer();
         try {
             mPlayer.setDataSource(mFileName);
             mPlayer.prepare();
             mPlayer.start();
+            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    playImage.setImageResource(play_btn);
+                }
+            });
         } catch (IOException e) {
             Log.e(LOG_TAG, "prepare() failed");
         }
@@ -110,35 +120,26 @@ public class RecordingHelpers {
         File newFile = new File(destFilePath);
         oldFile.renameTo(newFile);
 
-
-/*
-        File sourceFile = new File(sourceFilePath);
-        File destFile = new File(destFilePath);
-
-        if(!destFile.exists()) {
-            destFile.createNewFile();
-        }
-
-        FileChannel source = null;
-        FileChannel destination = null;
-        try {
-            source = new RandomAccessFile(sourceFile,"rw").getChannel();
-            destination = new RandomAccessFile(destFile,"rw").getChannel();
-
-            long position = 0;
-            long count    = source.size();
-
-            source.transferTo(position, count, destination);
-        }
-        finally {
-            if(source != null) {
-                source.close();
-            }
-            if(destination != null) {
-                destination.close();
-            }
-        }*/
     }
+    public String getCurrentDateTime(String format){
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(cal.getTime());
+    }
+
+    public void setTimeStarts(){
+        startTime = 0;
+        startTime = System.currentTimeMillis();
+    }
+    public String getElapseTime(){
+        long tEnd = System.currentTimeMillis();
+        long tDelta = tEnd - startTime;
+        double elapsedSeconds = tDelta / 1000.0;
+        String timeString;
+        timeString = elapsedSeconds<10?"0"+(int)elapsedSeconds:""+(int)elapsedSeconds;
+        return "00:"+timeString;
+    }
+
 
 
 }

@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 
 public class Prefrences {
 
-	public  static String KEY_PREFRENCE_INIT = "KEY_PREFRENCE_INIT";
+	public static String KEY_PREFRENCE_INIT = "KEY_PREFRENCE_INIT";
 	public static String KEY_RECORD_DURATION = "KEY_RECORD_DURATION";
 
 	private SharedPreferences prefs;
@@ -43,7 +43,7 @@ public class Prefrences {
 	}
 	public int getInt(String key) {
 
-		return prefs.getInt(key, 0);
+		return prefs.getInt(key,0);
 	}
 	public Boolean getBoolean(String key) {
 

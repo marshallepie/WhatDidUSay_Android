@@ -12,6 +12,7 @@ import android.view.Window;
  * Created by dottechnologies on 31/8/15.
  */
 public class SplashActivity extends Activity{
+    private Prefrences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +26,18 @@ public class SplashActivity extends Activity{
             int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE;
             decorView.setSystemUiVisibility(uiOptions);
         }
+
+        prefs = new Prefrences(SplashActivity.this);
+
+
+
+        if (!prefs.getContains(Prefrences.KEY_PREFRENCE_INIT))
+        {
+            prefs.setBooleanPrefs(Prefrences.KEY_PREFRENCE_INIT,true);
+            prefs.setIntPrefs(Prefrences.KEY_RECORD_DURATION, 10);
+        }
+
+
 
         new Handler().postDelayed(new Runnable() {
 

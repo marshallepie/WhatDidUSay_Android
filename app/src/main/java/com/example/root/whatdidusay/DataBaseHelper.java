@@ -5,11 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 
 /**
- * Created by lalit vasan on 31/8/15.
+ * Created by Dottechnologies on 31/8/15.
  * Class DataBaseHelper for handling local data base to store audio recordings
  * All CRUD operations are handled in this class
  */
@@ -77,7 +78,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public ArrayList<ModelRecording> getAllRecords() {
         ArrayList<ModelRecording> recordtList = new ArrayList<ModelRecording>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_RECORDINGS;
+        String selectQuery = "SELECT  * FROM " + TABLE_RECORDINGS +" ORDER BY "+ KEY_ID+" DESC";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -91,6 +92,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 record.setDate(cursor.getString(cursor.getColumnIndex(KEY_RECORD_DATE)));
                 record.setTime(cursor.getString(cursor.getColumnIndex(KEY_RECORD_TIME)));
                 record.setPath(cursor.getString(cursor.getColumnIndex(KEY_RECORD_PATH)));
+                record.setDuration(cursor.getString(cursor.getColumnIndex(KEY_RECORD_DURATION)));
                 record.setIsForDelete(false);
                 record.setIsPlaying(false);
 
@@ -101,4 +103,29 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return recordtList;
     }
+
+    public void updateName(String id,String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_RECORD_NAME, name);
+        db.update(TABLE_RECORDINGS, values, KEY_ID + " = ?",
+                new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deleteContact(String... ids) {
+        String allid = "";
+        if (ids.length>1)
+        {
+           allid = TextUtils.join(", ", ids);
+        }
+        else {
+            allid = ids[0];
+        }
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(String.format("DELETE FROM "+TABLE_RECORDINGS+" WHERE "+KEY_ID+" IN (%s);", allid));
+        db.close();
+    }
+
+
 }
