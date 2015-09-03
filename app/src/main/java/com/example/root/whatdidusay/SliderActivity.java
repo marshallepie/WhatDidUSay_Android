@@ -49,6 +49,7 @@ public class SliderActivity extends SlidingFragmentActivity {
 
     public static List<myFragmentsclass> myFragents = new ArrayList<myFragmentsclass>();
 
+    private Home_Fragment homeFragment;
 
 
     @Override
@@ -95,7 +96,7 @@ public class SliderActivity extends SlidingFragmentActivity {
         edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                homeFragment.deleteOperation();
             }
         });
 
@@ -108,7 +109,9 @@ public class SliderActivity extends SlidingFragmentActivity {
 
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
-        Fragment fragment = new Home_Fragment();
+        Fragment fragment = null;
+        homeFragment = new Home_Fragment();
+        fragment = (Fragment)homeFragment;
         ft.add(R.id.activity_main_content_fragment, fragment);
         ft.commit();
 
@@ -135,7 +138,8 @@ public class SliderActivity extends SlidingFragmentActivity {
                 String selectedItem = titlearr[arg2];
 
                 if (selectedItem.compareTo("Home") == 0) {
-                    fragment = new Home_Fragment();
+                    homeFragment = new Home_Fragment();
+                    fragment = (Fragment)homeFragment;
                     wdys_text.setText("What Did U Say");
 
                 }

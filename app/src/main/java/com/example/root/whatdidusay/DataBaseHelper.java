@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -78,8 +78,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public ArrayList<ModelRecording> getAllRecords() {
         ArrayList<ModelRecording> recordtList = new ArrayList<ModelRecording>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_RECORDINGS +" ORDER BY "+ KEY_ID+" DESC";
-
+        String selectQuery = "SELECT  * FROM " + TABLE_RECORDINGS;
+       // String selectQuery = "SELECT  * FROM " + TABLE_RECORDINGS +" ORDER BY "+ KEY_ID+" DESC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -113,17 +113,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteContact(String... ids) {
-        String allid = "";
-        if (ids.length>1)
-        {
-           allid = TextUtils.join(", ", ids);
-        }
-        else {
-            allid = ids[0];
-        }
+    public void deleteContact(String ids) {
+        String allid = ids;
+        allid = allid.replace("[","");
+        allid = allid.replace("]","");
+
+        Log.e("Ids", "" + allid);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(String.format("DELETE FROM "+TABLE_RECORDINGS+" WHERE "+KEY_ID+" IN (%s);", allid));
+        db.execSQL(String.format("DELETE FROM " + TABLE_RECORDINGS + " WHERE " + KEY_ID + " IN (%s);", allid));
         db.close();
     }
 

@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,11 +34,12 @@ public class AdapterRecording extends BaseAdapter {
     private Boolean statusPlaying;
     private int idSongPlaying;
     private MediaPlayer mPlayer = null;
-
-    public AdapterRecording(Context c, ArrayList<ModelRecording> list) {
+    private Home_Fragment fragment;
+    public AdapterRecording(Context c, ArrayList<ModelRecording> list,Home_Fragment frag) {
         mContext = c;
         inflater = LayoutInflater.from(c);
         mList = list;
+        fragment = frag;
         statusPlaying = false;
         db = new DataBaseHelper(mContext);
         recordingHelpers = new RecordingHelpers();
@@ -80,14 +82,21 @@ public class AdapterRecording extends BaseAdapter {
         //  holder.time_text.setTypeface(avalon_regular);
         holder.record_time = (TextView) v.findViewById(R.id.record_time);
         //   holder.record_time.setTypeface(avalon_regular);
+        v.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(mContext,"Hello",Toast.LENGTH_LONG).show();
+                return false;
+            }
+        });
 
         holder.title_tracklist.setTag(position);
         holder.title_tracklist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-              /*  int pos = Integer.parseInt(v.getTag().toString());
-                showInputDialog(pos);*/
+               int pos = Integer.parseInt(v.getTag().toString());
+                showInputDialog(pos);
 
             }
         });
@@ -95,8 +104,7 @@ public class AdapterRecording extends BaseAdapter {
         holder.play_tracklist_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             /*   Integer pos = Integer.parseInt(v.getTag().toString());
-
+                Integer pos = Integer.parseInt(v.getTag().toString());
 
                 if(statusPlaying){
                     //true
@@ -118,7 +126,7 @@ public class AdapterRecording extends BaseAdapter {
                     startPlaying(mList.get(idSongPlaying).getPath(), holder.play_tracklist_btn);
 
 
-                }*/
+                }
 
 
 
@@ -128,14 +136,18 @@ public class AdapterRecording extends BaseAdapter {
         holder.button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* Integer pos = Integer.parseInt(v.getTag().toString());
+                Integer pos = Integer.parseInt(v.getTag().toString());
                 if (mList.get(pos).isForDelete()) {
                     mList.get(pos).setIsForDelete(false);
                     holder.button_delete.setImageResource(R.drawable.ic_delete_uncheck);
+                    fragment.idsDelete.remove(mList.get(pos).getId());
+                    fragment.linkDelete.remove(mList.get(pos).getPath());
                 } else {
                     mList.get(pos).setIsForDelete(true);
                     holder.button_delete.setImageResource(R.drawable.ic_delete_check);
-                }*/
+                    fragment.idsDelete.add(mList.get(pos).getId());
+                    fragment.linkDelete.add(mList.get(pos).getPath());
+                }
 
             }
         });

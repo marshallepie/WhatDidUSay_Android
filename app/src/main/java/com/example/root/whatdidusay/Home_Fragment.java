@@ -1,6 +1,7 @@
 package com.example.root.whatdidusay;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,6 +47,8 @@ public class Home_Fragment extends Fragment {
     private final String TAG_STORING = "Storing";
     private Prefrences prefs;
     private int recordDuration;
+    public ArrayList<String> idsDelete;
+    public ArrayList<String> linkDelete;
 
 
 
@@ -93,6 +97,8 @@ public class Home_Fragment extends Fragment {
         recordingHelpers = new RecordingHelpers();
         db = new DataBaseHelper(act);
         prefs = new Prefrences(act);
+        idsDelete = new ArrayList<String>();
+        linkDelete = new ArrayList<String>();
         recordDuration = (prefs.getInt(Prefrences.KEY_RECORD_DURATION)*1000);
 
         handler = new Handler();
@@ -130,7 +136,7 @@ public class Home_Fragment extends Fragment {
                 recordingHelpers.setTimeStarts();
                 handler.postDelayed(runnable, recordDuration);
                 tExtStatus.setText(TAG_MONITORING);
-                mListView.setEnabled(false);
+                getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
 
 
@@ -157,13 +163,15 @@ public class Home_Fragment extends Fragment {
                 handler.removeCallbacks(runnable);
                 recordingHelpers.stopRecording();
                 tExtStatus.setText(TAG_NO_ACTION);
-                mListView.setEnabled(true);
+                getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
              //   recordingHelpers.stopRecording();
 
 
             }
         });
     }
+
+
 
 
     private class RecordTask extends AsyncTask<Void,Void,Void>{
@@ -230,6 +238,7 @@ public class Home_Fragment extends Fragment {
             listRecords = null;
             listRecords = new ArrayList<ModelRecording>();
             listRecords.clear();
+            idsDelete.clear();
 
         }
 
@@ -245,10 +254,17 @@ public class Home_Fragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             textEmpty.setVisibility(TextView.VISIBLE);
-            mListView.setAdapter(new AdapterRecording(act, listRecords));
+            mListView.setAdapter(new AdapterRecording(act, listRecords, Home_Fragment.this));
             mListView.setEmptyView(textEmpty);
             progressBar.setVisibility(ProgressBar.GONE);
 
         }
     }
+
+    public void deleteOperation(){
+
+        Toast.makeText(getActivity(),"Coming Soon",Toast.LENGTH_SHORT).show();
+
+    }
+
 }
