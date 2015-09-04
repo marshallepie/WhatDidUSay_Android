@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 /**
  * Created by root on 21/8/15.
+ * This class is to set timing for recording
  */
 public class Settings_Fragment extends Fragment {
 

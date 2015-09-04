@@ -5,6 +5,11 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
+/**
+ * Created by dottechnologies on 2/9/15.
+ * This class is to store,retrieve values for timer  .
+ */
+
 public class Prefrences {
 
 	public static String KEY_PREFRENCE_INIT = "KEY_PREFRENCE_INIT";

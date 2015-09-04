@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -94,6 +95,7 @@ public class Home_Fragment extends Fragment {
     }
 
     private void initObjects() {
+
         recordingHelpers = new RecordingHelpers();
         db = new DataBaseHelper(act);
         prefs = new Prefrences(act);
@@ -263,8 +265,47 @@ public class Home_Fragment extends Fragment {
 
     public void deleteOperation(){
 
-        Toast.makeText(getActivity(),"Coming Soon",Toast.LENGTH_SHORT).show();
+        if (idsDelete.size()>0){
+            String allid = idsDelete.toString();
+            allid = allid.replace("[","");
+            allid = allid.replace("]","");
+            new DeleteData().execute(allid);
+        }
+        else {
 
+            Toast.makeText(getActivity(),"select to delete",Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+    class DeleteData extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(ProgressBar.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            for (int i=0;i<linkDelete.size();i++){
+                File file = new File(linkDelete.get(i).toString());
+                if (file.exists()){
+                    file.delete();
+                }
+            }
+            db.deleteContact(params[0]);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressBar.setVisibility(ProgressBar.GONE);
+            new FetchDataBase().execute();
+        }
     }
 
 }

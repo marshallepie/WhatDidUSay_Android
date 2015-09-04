@@ -2,6 +2,7 @@ package com.example.root.whatdidusay;
 
 /**
  * Created by dottechnologies on 1/9/15.
+ * this class is models for recording item
  */
 public class ModelRecording {
 

@@ -15,6 +15,7 @@ import static com.example.root.whatdidusay.R.drawable.play_btn;
 
 /**
  * Created by dottechnologies on 31/8/15.
+ * THis class is a helper class for recording .
  */
 public class RecordingHelpers {
 

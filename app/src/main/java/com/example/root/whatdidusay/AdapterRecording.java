@@ -2,7 +2,11 @@ package com.example.root.whatdidusay;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Telephony;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -35,6 +40,7 @@ public class AdapterRecording extends BaseAdapter {
     private int idSongPlaying;
     private MediaPlayer mPlayer = null;
     private Home_Fragment fragment;
+    private String [] exportMenuArray = {"Text" ,"Mail","DropBox"};
     public AdapterRecording(Context c, ArrayList<ModelRecording> list,Home_Fragment frag) {
         mContext = c;
         inflater = LayoutInflater.from(c);
@@ -82,10 +88,13 @@ public class AdapterRecording extends BaseAdapter {
         //  holder.time_text.setTypeface(avalon_regular);
         holder.record_time = (TextView) v.findViewById(R.id.record_time);
         //   holder.record_time.setTypeface(avalon_regular);
+        v.setTag(position);
         v.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(mContext,"Hello",Toast.LENGTH_LONG).show();
+               // Toast.makeText(mContext,"Hello",Toast.LENGTH_LONG).show();
+                int pos = Integer.parseInt(v.getTag().toString());
+                showShareDialog(pos);
                 return false;
             }
         });
@@ -227,7 +236,7 @@ public class AdapterRecording extends BaseAdapter {
                         String editString = editText.getText().toString().trim();
                         if (!editString.equals("")) {
 
-                            db.updateName(mList.get(pos).getId(),editString);
+                            db.updateName(mList.get(pos).getId(), editString);
                             mList.get(pos).setName(editString);
                             notifyDataSetChanged();
 
@@ -250,7 +259,83 @@ public class AdapterRecording extends BaseAdapter {
         alert.show();
     }
 
-    protected void showErrorDialog() {
+    private void showShareDialog(final int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Export Your Recording")
+                .setItems(exportMenuArray, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+
+
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                {
+                                    String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(mContext);
+
+                                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                                    sendIntent.setType("text/plain");
+                                    sendIntent.putExtra(Intent.EXTRA_TEXT, "What Did You Say App - Recording");
+                                    sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mList.get(position).getPath())));
+
+                                    if (defaultSmsPackageName != null)
+                                    {
+                                        sendIntent.setPackage(defaultSmsPackageName);
+                                    }
+                                    mContext.startActivity(sendIntent);
+
+                                }
+                                else
+                                {
+
+                                    Intent intent = new Intent(Intent.ACTION_SEND);
+                                    intent.putExtra("sms_body", "What Did You Say App - Recording");
+                                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mList.get(position).getPath())));
+                                    if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+                                        mContext.startActivity(intent);
+                                    }
+                                    else {
+                                        Toast.makeText(mContext,"Cannot Support MMS",Toast.LENGTH_LONG).show();
+                                    }
+
+
+                                }
+
+
+                                break;
+                            case 1:
+                                try {
+
+                                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                                sendIntent.setType("plain/text");
+                                sendIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
+                                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "What Did You Say App - Recording");
+                                sendIntent.putExtra(Intent.EXTRA_TEXT, "");
+                                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mList.get(position).getPath())));
+                                mContext.startActivity(sendIntent);
+
+                                }
+                                catch (Exception e){
+                                    Intent intent = new Intent(Intent.ACTION_SEND);
+                                    intent.setType("text/plain");
+                                    intent.putExtra(Intent.EXTRA_SUBJECT, "What Did You Say App - Recording");
+                                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mList.get(position).getPath())));
+                                    mContext.startActivity(Intent.createChooser(intent, "Send email via"));
+                                }
+
+
+                                break;
+                            case 2:
+
+                                break;
+                        }
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
+    private void showErrorDialog() {
 
 
 

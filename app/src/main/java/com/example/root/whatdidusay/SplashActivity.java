@@ -10,6 +10,7 @@ import android.view.Window;
 
 /**
  * Created by dottechnologies on 31/8/15.
+ * This class is to show welcome screen for 3 seconds and the navigate to SliderActivity
  */
 public class SplashActivity extends Activity{
     private Prefrences prefs;
