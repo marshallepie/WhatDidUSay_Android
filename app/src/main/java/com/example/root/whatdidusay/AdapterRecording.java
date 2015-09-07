@@ -41,6 +41,7 @@ public class AdapterRecording extends BaseAdapter {
     private MediaPlayer mPlayer = null;
     private Home_Fragment fragment;
     private String [] exportMenuArray = {"Text" ,"Mail","DropBox"};
+
     public AdapterRecording(Context c, ArrayList<ModelRecording> list,Home_Fragment frag) {
         mContext = c;
         inflater = LayoutInflater.from(c);
@@ -289,12 +290,14 @@ public class AdapterRecording extends BaseAdapter {
 
                                     Intent intent = new Intent(Intent.ACTION_SEND);
                                     intent.putExtra("sms_body", "What Did You Say App - Recording");
+                                    intent.setData(Uri.parse("smsto:"));
+                                    intent.setType("video/*");
                                     intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mList.get(position).getPath())));
                                     if (intent.resolveActivity(mContext.getPackageManager()) != null) {
                                         mContext.startActivity(intent);
                                     }
                                     else {
-                                        Toast.makeText(mContext,"Cannot Support MMS",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(mContext,"Cannot Support MMS",Toast.LENGTH_SHORT).show();
                                     }
 
 
@@ -325,7 +328,7 @@ public class AdapterRecording extends BaseAdapter {
 
                                 break;
                             case 2:
-
+                                fragment.exportDropBox(mList.get(position).getPath());
                                 break;
                         }
                     }

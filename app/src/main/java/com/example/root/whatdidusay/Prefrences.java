@@ -15,6 +15,9 @@ public class Prefrences {
 	public static String KEY_PREFRENCE_INIT = "KEY_PREFRENCE_INIT";
 	public static String KEY_RECORD_DURATION = "KEY_RECORD_DURATION";
 
+	public static  String ACCESS_KEY_NAME = "ACCESS_KEY";
+	public static  String ACCESS_SECRET_NAME = "ACCESS_SECRET";
+
 	private SharedPreferences prefs;
 	private Editor edit;
 

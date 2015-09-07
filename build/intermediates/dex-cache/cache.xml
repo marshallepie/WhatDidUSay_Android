@@ -2,6 +2,13 @@
 <items version="2" >
 
     <item
+        jar="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/libs/dropbox-android-sdk-1.6.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="986e7a58e925c6f91b88ae8d3224a0550b65acc7">
+        <dex dex="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/dropbox-android-sdk-1.6.3-eaa6d32659b0451b49ef957cada6d5eb7adf0938.jar" />
+    </item>
+    <item
         jar="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/classes.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -12,8 +19,15 @@
         jar="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/WhatDidUSay_Android/libraryy_2/unspecified/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="dcf1b0d1119e2922d1dde7770bb5db71d02d9a65">
+        sha1="b5b30c120e1bc2abde66f2ae997288e392ab76a5">
         <dex dex="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/classes-a287c03247b25336564b6cd19574e5c45d91c8f0.jar" />
+    </item>
+    <item
+        jar="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/libs/json_simple-1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5e303a03d04e6788dddfa3655272580ae0fc13bb">
+        <dex dex="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/json_simple-1.1-d84f424ef6d93f2ac49163dfd3995316a9af105b.jar" />
     </item>
     <item
         jar="/media/dottechnologies/DATA1/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/classes.jar"

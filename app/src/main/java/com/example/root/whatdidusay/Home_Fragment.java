@@ -1,6 +1,8 @@
 package com.example.root.whatdidusay;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +17,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +47,7 @@ public class Home_Fragment extends Fragment {
     private DataBaseHelper db;
     private Handler handler;
     private Runnable runnable;
-    private String tempFilePath ;
+    private String tempFilePath;
     private final String TAG_NO_ACTION = "No Action";
     private final String TAG_MONITORING = "Monitoring";
     private final String TAG_STORING = "Storing";
@@ -51,6 +56,11 @@ public class Home_Fragment extends Fragment {
     public ArrayList<String> idsDelete;
     public ArrayList<String> linkDelete;
 
+
+    private DropboxAPI<AndroidAuthSession> mDBApi;
+    private  File fileToUpload;
+
+    private DropBoxHelpers dropBoxHelpers;
 
 
     @Override
@@ -76,7 +86,6 @@ public class Home_Fragment extends Fragment {
     }
 
 
-
     private void initViews(View v) {
         mListView = (ListView) v.findViewById(R.id.tracklist);
         play_btn = (ImageView) v.findViewById(R.id.play_btn);
@@ -95,13 +104,16 @@ public class Home_Fragment extends Fragment {
     }
 
     private void initObjects() {
+        dropBoxHelpers = new DropBoxHelpers(getActivity());
+        AndroidAuthSession session = dropBoxHelpers.buildSession();
+        mDBApi = new DropboxAPI<AndroidAuthSession>(session);
 
         recordingHelpers = new RecordingHelpers();
         db = new DataBaseHelper(act);
         prefs = new Prefrences(act);
         idsDelete = new ArrayList<String>();
         linkDelete = new ArrayList<String>();
-        recordDuration = (prefs.getInt(Prefrences.KEY_RECORD_DURATION)*1000);
+        recordDuration = (prefs.getInt(Prefrences.KEY_RECORD_DURATION) * 1000);
 
         handler = new Handler();
         runnable = new Runnable() {
@@ -119,7 +131,7 @@ public class Home_Fragment extends Fragment {
 
         new FetchDataBase().execute();
 
-      //  Toast.makeText(act, "" + recordingHelpers.getCurrentDateTime("dd/MM/yyyy") + "\n" + recordingHelpers.getCurrentDateTime("hh:mm aa"), Toast.LENGTH_LONG).show();
+        //  Toast.makeText(act, "" + recordingHelpers.getCurrentDateTime("dd/MM/yyyy") + "\n" + recordingHelpers.getCurrentDateTime("hh:mm aa"), Toast.LENGTH_LONG).show();
 
     }
 
@@ -139,7 +151,6 @@ public class Home_Fragment extends Fragment {
                 handler.postDelayed(runnable, recordDuration);
                 tExtStatus.setText(TAG_MONITORING);
                 getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-
 
 
             }
@@ -166,17 +177,84 @@ public class Home_Fragment extends Fragment {
                 recordingHelpers.stopRecording();
                 tExtStatus.setText(TAG_NO_ACTION);
                 getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-             //   recordingHelpers.stopRecording();
+                //   recordingHelpers.stopRecording();
 
 
             }
         });
     }
 
+    public void exportDropBox(String path) {
+
+        if (CheckInternet.isNetworkAvailable(getActivity())){
+
+            fileToUpload = new File(path);
+
+            if (fileToUpload.exists()){
+                if (mDBApi.getSession().isLinked()){
+
+                    UploadFile uploadFile = new UploadFile(getActivity(), mDBApi, fileToUpload);
+                    uploadFile.execute();
+
+                }
+                else {
+                    mDBApi.getSession().startOAuth2Authentication(getActivity());
+
+
+                }
+            }
+            else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("File not Exist");
+                builder.setMessage("File is removed");
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.show();
+            }
+
+
+        }
+        else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("No Connection");
+            builder.setMessage("Connect to Internet");
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.show();
+        }
+
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        AndroidAuthSession session = mDBApi.getSession();
+
+        // The next part must be inserted in the onResume() method of the
+        // activity from which session.startAuthentication() was called, so
+        // that Dropbox authentication completes properly.
+        if (session.authenticationSuccessful()) {
+            try {
+                // Mandatory call to complete the auth
+                session.finishAuthentication();
+
+                // Store it locally in our app for later use
+                dropBoxHelpers.storeAuth(session);
+
+                UploadFile uploadFile = new UploadFile(getActivity(), mDBApi, fileToUpload);
+                uploadFile.execute();
+
+            } catch (IllegalStateException e) {
+                Toast.makeText(getActivity(), "Couldn't authenticate with Dropbox:" + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                Log.i("EROOR", "Error authenticating", e);
+            }
+        }
+    }
 
 
 
-    private class RecordTask extends AsyncTask<Void,Void,Void>{
+
+    private class RecordTask extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -207,7 +285,7 @@ public class Home_Fragment extends Fragment {
                 db.addRecord(models);
 
 
-                Log.e("Timer<><><><>",recordingHelpers.getElapseTime());
+                Log.e("Timer<><><><>", recordingHelpers.getElapseTime());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -229,8 +307,7 @@ public class Home_Fragment extends Fragment {
     }
 
 
-
-    private class FetchDataBase extends AsyncTask<Void,Void,Void>{
+    private class FetchDataBase extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -263,22 +340,40 @@ public class Home_Fragment extends Fragment {
         }
     }
 
-    public void deleteOperation(){
+    public void deleteOperation() {
 
-        if (idsDelete.size()>0){
+
+        if (idsDelete.size() > 0) {
             String allid = idsDelete.toString();
-            allid = allid.replace("[","");
-            allid = allid.replace("]","");
-            new DeleteData().execute(allid);
-        }
-        else {
+            allid = allid.replace("[", "");
+            allid = allid.replace("]", "");
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Confirm Delete");
+            builder.setMessage("Do you want to delete ?");
+            final String finalAllid = allid;
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    new DeleteData().execute(finalAllid);
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel,null);
 
-            Toast.makeText(getActivity(),"select to delete",Toast.LENGTH_SHORT).show();
+            builder.show();
+
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Error");
+            builder.setMessage("make a selection to delete");
+            builder.setPositiveButton(android.R.string.ok, null);
+            builder.show();
+
         }
 
 
     }
-    class DeleteData extends AsyncTask<String,Void,Void>{
+
+    class DeleteData extends AsyncTask<String, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -289,9 +384,9 @@ public class Home_Fragment extends Fragment {
         @Override
         protected Void doInBackground(String... params) {
 
-            for (int i=0;i<linkDelete.size();i++){
+            for (int i = 0; i < linkDelete.size(); i++) {
                 File file = new File(linkDelete.get(i).toString());
-                if (file.exists()){
+                if (file.exists()) {
                     file.delete();
                 }
             }
