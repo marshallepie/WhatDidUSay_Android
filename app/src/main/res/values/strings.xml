@@ -3,7 +3,16 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    
+    <string name="from_html_text">
+<![CDATA[
+<Html>
+<div >
+
+ <img style="float:left;" src="play_green" align="middle"> <span style="float:left;"> This is some text. This is some text.This is some text.</span>
+</div>
+ </Html>
+]]>
+</string>
 
 </resources>
 

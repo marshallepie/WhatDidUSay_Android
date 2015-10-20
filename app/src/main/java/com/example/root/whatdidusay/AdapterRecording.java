@@ -178,12 +178,20 @@ public class AdapterRecording extends BaseAdapter {
         if (!mList.get(position).getName().equals("")) {
             holder.title_tracklist.setText(mList.get(position).getName());
         } else {
-            holder.title_tracklist.setText("Record-" + position);
+            String titlePosition = "";
+            if (position<9){
+                titlePosition = "0"+(position+1);
+            }
+            else {
+                titlePosition = ""+(position+1);
+            }
+
+            holder.title_tracklist.setText("Snippet " + titlePosition);
         }
 
 
         holder.date_text.setText(mList.get(position).getDate());
-        holder.time_text.setText(mList.get(position).getTime());
+        holder.time_text.setText(" "+mList.get(position).getTime());
         holder.record_time.setText(mList.get(position).getDuration());
 
         return v;
