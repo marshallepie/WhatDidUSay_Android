@@ -20,6 +20,10 @@ import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
+import com.example.root.whatdidusay.Adapters.AdapterRecording;
+import com.example.root.whatdidusay.Helpers.RecordingHelpers;
+import com.example.root.whatdidusay.utils.IabHelper;
+import com.example.root.whatdidusay.utils.IabResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +34,10 @@ import java.util.ArrayList;
  * Created by root on 21/8/15.
  */
 public class Home_Fragment extends Fragment {
+
+
+    private IabHelper mIabHelper;
+
 
     private static View view;
     private static Activity act;
@@ -46,6 +54,7 @@ public class Home_Fragment extends Fragment {
     private ArrayList<ModelRecording> listRecords;
     private DataBaseHelper db;
     private Handler handler;
+
     private Runnable runnable;
     private String tempFilePath;
     private final String TAG_NO_ACTION = "No Action";
@@ -56,9 +65,8 @@ public class Home_Fragment extends Fragment {
     public ArrayList<String> idsDelete;
     public ArrayList<String> linkDelete;
 
-
     private DropboxAPI<AndroidAuthSession> mDBApi;
-    private  File fileToUpload;
+    private File fileToUpload;
 
     private DropBoxHelpers dropBoxHelpers;
 
@@ -77,14 +85,20 @@ public class Home_Fragment extends Fragment {
         avalon_bold = Typeface.createFromAsset(act.getAssets(),
                 "Avalon Bold.ttf");*/
 
+
+
         initViews(view);
         initObjects();
-        initListners();
+        initListeners();
 
         return view;
 
     }
 
+    /**
+     * initialize all view objects
+     * @param v
+     */
 
     private void initViews(View v) {
         mListView = (ListView) v.findViewById(R.id.tracklist);
@@ -103,8 +117,24 @@ public class Home_Fragment extends Fragment {
 
     }
 
+    /**
+     * initialize all objects
+     */
     private void initObjects() {
+        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsNOQtsf5M5E1WbMD70TVXyAN5CBFgCSK7dJV8DYnu3cRe+3zNbZUgwy6bhULMiCHFAfJwo78EwmlPgEmTk2jdI8AwWh3ut4XGdYn/zlGMu6LQs/dLDdWm8cSO32WldqyPyEEA4UW7XsbvzFYR8K+VNVU18X2ey+WCxA91baXSVEzJ4v3H8hTH79C3EzT6hlAauks3MKooUzV9c6AkEQ6VA36GVmj5D6uDpnclpOlvnV98vIPQexjiGGQI9fboluS5nXZZ/QIyz7eljmtMdDsd2MS7/rZPVVJ7+Ytk2w0oBOL1C0Q0CtOl+8WI8mOcm2IxE4aCWGrtBBSzOuqpGl5nwIDAQAB";
+
         dropBoxHelpers = new DropBoxHelpers(getActivity());
+        mIabHelper = new IabHelper(getActivity(),base64EncodedPublicKey);
+        mIabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    // Oh noes, there was a problem.
+                    Log.e("Home_Fragment", "Problem setting up In-app Billing: " + result);
+                }
+                // Hooray, IAB is fully set up!
+                Log.e("Home_Fragment", "Problem setting up In-app Billing: " + result);
+            }
+        });
         AndroidAuthSession session = dropBoxHelpers.buildSession();
         mDBApi = new DropboxAPI<AndroidAuthSession>(session);
 
@@ -135,23 +165,23 @@ public class Home_Fragment extends Fragment {
 
     }
 
-    private void initListners() {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mIabHelper != null) mIabHelper.dispose();
+        mIabHelper = null;
+    }
+
+    /**
+     * initialize all listeners
+     */
+    private void initListeners() {
 
         play_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                play_btn.setAlpha(0.5f);
-                record_btn.setAlpha(1.0f);
-                stop_btn.setAlpha(1.0f);
-                play_btn.setEnabled(false);
-                record_btn.setEnabled(true);
-                stop_btn.setEnabled(true);
-                recordingHelpers.startRecording(tempFilePath);
-                recordingHelpers.setTimeStarts();
-                handler.postDelayed(runnable, recordDuration);
-                tExtStatus.setText(TAG_MONITORING);
-                getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
+                playFunction();
 
             }
         });
@@ -159,7 +189,26 @@ public class Home_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                new RecordTask().execute();
+                if (listRecords.size() >= 3) {
+                    stopFunction();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Limit Exceeds");
+                    builder.setCancelable(false);
+                    builder.setMessage("Unlock the limit for unlimited recording");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setNegativeButton("Unlock", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+
+
+                        }
+                    });
+
+                    builder.show();
+                } else {
+                    new RecordTask().execute();
+                }
 
 
             }
@@ -167,43 +216,71 @@ public class Home_Fragment extends Fragment {
         stop_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                play_btn.setAlpha(1.0f);
-                record_btn.setAlpha(0.5f);
-                stop_btn.setAlpha(0.5f);
-                play_btn.setEnabled(true);
-                record_btn.setEnabled(false);
-                stop_btn.setEnabled(false);
-                handler.removeCallbacks(runnable);
-                recordingHelpers.stopRecording();
-                tExtStatus.setText(TAG_NO_ACTION);
-                getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                //   recordingHelpers.stopRecording();
 
+                stopFunction();
 
             }
         });
     }
 
+    /**
+     * playFunction to start recording and disable/enable buttons
+     */
+    private void playFunction() {
+        play_btn.setAlpha(0.5f);
+        record_btn.setAlpha(1.0f);
+        stop_btn.setAlpha(1.0f);
+        play_btn.setEnabled(false);
+        record_btn.setEnabled(true);
+        stop_btn.setEnabled(true);
+        recordingHelpers.startRecording(tempFilePath);
+        recordingHelpers.setTimeStarts();
+        handler.postDelayed(runnable, recordDuration);
+        tExtStatus.setText(TAG_MONITORING);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+
+    }
+
+    /**
+     * stopFunction to stop recording and disable/enable buttons
+     */
+    private void stopFunction() {
+
+        play_btn.setAlpha(1.0f);
+        record_btn.setAlpha(0.5f);
+        stop_btn.setAlpha(0.5f);
+        play_btn.setEnabled(true);
+        record_btn.setEnabled(false);
+        stop_btn.setEnabled(false);
+        handler.removeCallbacks(runnable);
+        recordingHelpers.stopRecording();
+        tExtStatus.setText(TAG_NO_ACTION);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+
+    }
+
+    /**
+     * export file to drop box
+     * @param path
+     */
     public void exportDropBox(String path) {
 
-        if (CheckInternet.isNetworkAvailable(getActivity())){
+        if (CheckInternet.isNetworkAvailable(getActivity())) {
 
             fileToUpload = new File(path);
 
-            if (fileToUpload.exists()){
-                if (mDBApi.getSession().isLinked()){
+            if (fileToUpload.exists()) {
+                if (mDBApi.getSession().isLinked()) {
 
                     UploadFile uploadFile = new UploadFile(getActivity(), mDBApi, fileToUpload);
                     uploadFile.execute();
 
-                }
-                else {
+                } else {
                     mDBApi.getSession().startOAuth2Authentication(getActivity());
 
 
                 }
-            }
-            else {
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("File not Exist");
                 builder.setMessage("File is removed");
@@ -212,8 +289,7 @@ public class Home_Fragment extends Fragment {
             }
 
 
-        }
-        else {
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("No Connection");
             builder.setMessage("Connect to Internet");
@@ -252,8 +328,9 @@ public class Home_Fragment extends Fragment {
     }
 
 
-
-
+    /**
+     * Store recording in database at background thread
+     */
     private class RecordTask extends AsyncTask<Void, Void, Void> {
 
 
@@ -272,10 +349,9 @@ public class Home_Fragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
+
                 String filePath = recordingHelpers.generateFilePath();
-
                 recordingHelpers.copyFile(tempFilePath, filePath);
-
                 ModelRecording models = new ModelRecording();
                 models.setName("");
                 models.setDate(recordingHelpers.getCurrentDateTime("dd/MM/yyyy"));
@@ -283,8 +359,6 @@ public class Home_Fragment extends Fragment {
                 models.setDuration(recordingHelpers.getElapseTime());
                 models.setPath(filePath);
                 db.addRecord(models);
-
-
                 Log.e("Timer<><><><>", recordingHelpers.getElapseTime());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -306,7 +380,9 @@ public class Home_Fragment extends Fragment {
         }
     }
 
-
+    /**
+     * fetch all recording data from database in background thread
+     */
     private class FetchDataBase extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -340,6 +416,10 @@ public class Home_Fragment extends Fragment {
         }
     }
 
+    /**
+     * Delete operation to delete from database
+     */
+
     public void deleteOperation() {
 
 
@@ -357,7 +437,7 @@ public class Home_Fragment extends Fragment {
                     new DeleteData().execute(finalAllid);
                 }
             });
-            builder.setNegativeButton(android.R.string.cancel,null);
+            builder.setNegativeButton(android.R.string.cancel, null);
 
             builder.show();
 
@@ -373,6 +453,9 @@ public class Home_Fragment extends Fragment {
 
     }
 
+    /**
+     * Delete all Selected Recording from database in background thread
+     */
     class DeleteData extends AsyncTask<String, Void, Void> {
 
         @Override

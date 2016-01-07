@@ -1,4 +1,4 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.Adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +17,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.root.whatdidusay.DataBaseHelper;
+import com.example.root.whatdidusay.Home_Fragment;
+import com.example.root.whatdidusay.ModelRecording;
+import com.example.root.whatdidusay.R;
+import com.example.root.whatdidusay.Helpers.RecordingHelpers;
 
 import java.io.File;
 import java.io.IOException;

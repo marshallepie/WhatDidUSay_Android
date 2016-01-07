@@ -2,6 +2,7 @@ package com.example.root.whatdidusay;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -49,7 +52,7 @@ public class SliderActivity extends SlidingFragmentActivity {
 
     public static List<myFragmentsclass> myFragents = new ArrayList<myFragmentsclass>();
 
-    private Home_Fragment homeFragment;
+    private HomeFragment homeFragment;
 
 
     @Override
@@ -82,6 +85,7 @@ public class SliderActivity extends SlidingFragmentActivity {
         wdys_text = (TextView) findViewById(R.id.wdys_text);
         //  wdys_text.setTypeface(avalon_bold);
         edit_btn = (ImageView) findViewById(R.id.edit_btn);
+        //edit_btn.setVisibility(View.GONE);
 
         slider_btn.setOnClickListener(new View.OnClickListener() {
 
@@ -96,7 +100,8 @@ public class SliderActivity extends SlidingFragmentActivity {
         edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homeFragment.deleteOperation();
+            showInputDialog(0);
+
             }
         });
 
@@ -110,7 +115,7 @@ public class SliderActivity extends SlidingFragmentActivity {
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
         Fragment fragment = null;
-        homeFragment = new Home_Fragment();
+        homeFragment = new HomeFragment();
         fragment = (Fragment)homeFragment;
         ft.add(R.id.activity_main_content_fragment, fragment);
         ft.commit();
@@ -138,7 +143,7 @@ public class SliderActivity extends SlidingFragmentActivity {
                 String selectedItem = titlearr[arg2];
 
                 if (selectedItem.compareTo("Home") == 0) {
-                    homeFragment = new Home_Fragment();
+                    homeFragment = new HomeFragment();
                     fragment = (Fragment)homeFragment;
                     wdys_text.setText("What Did U Say");
 
@@ -176,6 +181,49 @@ public class SliderActivity extends SlidingFragmentActivity {
             }
         });
 
+    }
+
+    protected void showInputDialog(int position) {
+        final int pos = position;
+
+        LayoutInflater layoutInflater = LayoutInflater.from(SliderActivity.this);
+        View promptView = layoutInflater.inflate(R.layout.layout_dailog_name_edit, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SliderActivity.this);
+        alertDialogBuilder.setView(promptView);
+        alertDialogBuilder.setTitle("Folder Name");
+
+        final EditText editText = (EditText) promptView.findViewById(R.id.eDitFile);
+        editText.setHint("Enter Folder Name");
+        editText.setSingleLine(true);
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        String editString = editText.getText().toString().trim();
+                        if (!editString.equals("")) {
+
+                            homeFragment.createFolder(editString);
+                           /* db.updateName(mList.get(pos).getId(), editString);
+                            mList.get(pos).setName(editString);
+                            notifyDataSetChanged();*/
+
+                        } else {
+                           // showErrorDialog();
+                        }
+                        editText.setText(null);
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                editText.setText(null);
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
     private class MenuAdapter extends BaseAdapter {

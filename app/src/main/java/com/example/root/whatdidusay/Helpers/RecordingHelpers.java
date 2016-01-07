@@ -1,4 +1,4 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.Helpers;
 
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -46,12 +46,11 @@ public class RecordingHelpers {
     public String generateFilePath() {
         String mFileName;
         mFileName = mainDir +File.separator + System.currentTimeMillis() + ".3gp";
-
-
         return mFileName;
     }
 
     public String getTempFilePath(){
+
         String mFileName;
         mFileName = tempDir +File.separator+"temp.3gp";
 
