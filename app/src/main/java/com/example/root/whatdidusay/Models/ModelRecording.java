@@ -1,4 +1,4 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.Models;
 
 /**
  * Created by dottechnologies on 1/9/15.
@@ -12,8 +12,17 @@ public class ModelRecording {
     private String time;
     private String duration;
     private String path;
+    private String folder;
     private Boolean isPlaying;
     private Boolean isForDelete;
+
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
 
     public String getId() {
         return id;

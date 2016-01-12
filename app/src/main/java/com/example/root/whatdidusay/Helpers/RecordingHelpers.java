@@ -49,6 +49,12 @@ public class RecordingHelpers {
         return mFileName;
     }
 
+    public String generateFilePath(String folderName,String fileName) {
+        String mFileName;
+        mFileName = mainDir +File.separator +"Groups" +File.separator+folderName +File.separator+ fileName + ".3gp";
+        return mFileName;
+    }
+
     public String getTempFilePath(){
 
         String mFileName;
@@ -117,7 +123,9 @@ public class RecordingHelpers {
     public  void copyFile(String sourceFilePath, String destFilePath) throws IOException {
 
         File oldFile = new File (sourceFilePath);
+        Log.e("source path",sourceFilePath);
         File newFile = new File(destFilePath);
+        Log.e("destincation path",destFilePath);
         oldFile.renameTo(newFile);
 
     }

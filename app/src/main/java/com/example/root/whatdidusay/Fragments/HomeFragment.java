@@ -1,4 +1,4 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.Fragments;
 
 
 import android.app.ProgressDialog;
@@ -26,7 +26,9 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.root.whatdidusay.Activities.RecordingActivity;
 import com.example.root.whatdidusay.Adapters.AdapterFolders;
+import com.example.root.whatdidusay.Database.DataBaseHelper;
 import com.example.root.whatdidusay.Helpers.FileHelpers;
+import com.example.root.whatdidusay.R;
 
 import java.io.File;
 
@@ -41,6 +43,7 @@ public class HomeFragment extends Fragment {
     private File[] folders;
     private AdapterFolders adapterFolders;
     private File[] foldersArray;
+    private DataBaseHelper database;
 
     @Nullable
     @Override
@@ -54,6 +57,7 @@ public class HomeFragment extends Fragment {
 
         listFolders = (SwipeMenuListView) view.findViewById(R.id.listFolders);
         fileHelpers = new FileHelpers();
+        database = new DataBaseHelper(getActivity());
 
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
@@ -93,8 +97,9 @@ public class HomeFragment extends Fragment {
                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            // Toast.makeText(getActivity(),"positon"+ position+" index" +index,Toast.LENGTH_LONG).show();
+                                           //  Toast.makeText(getActivity(),"positon"+ position+" index" +index,Toast.LENGTH_LONG).show();
                                             fileHelpers.deleteFolder(foldersArray[position].getName());
+                                            database.deleteRecordFolder(foldersArray[position].getName());
                                             new FetchFolders().execute();
                                         }
                                     })

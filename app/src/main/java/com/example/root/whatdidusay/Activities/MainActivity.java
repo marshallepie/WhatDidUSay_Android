@@ -1,4 +1,4 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.root.whatdidusay.Helpers.RecordingHelpers;
+import com.example.root.whatdidusay.R;
 
 /**
  * Created by dottechnologies on 31/8/15.

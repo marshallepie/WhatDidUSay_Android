@@ -1,4 +1,4 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.Helpers;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

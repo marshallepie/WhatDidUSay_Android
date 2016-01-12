@@ -1,4 +1,4 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.Helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +14,7 @@ public class Prefrences {
 
 	public static String KEY_PREFRENCE_INIT = "KEY_PREFRENCE_INIT";
 	public static String KEY_RECORD_DURATION = "KEY_RECORD_DURATION";
+	public static String KEY_RECORD_ID = "KEY_RECORD_ID";
 
 	public static  String ACCESS_KEY_NAME = "ACCESS_KEY";
 	public static  String ACCESS_SECRET_NAME = "ACCESS_SECRET";

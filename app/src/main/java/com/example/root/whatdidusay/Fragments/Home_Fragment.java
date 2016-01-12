@@ -1,4 +1,4 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.Fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,7 +21,14 @@ import android.widget.Toast;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.example.root.whatdidusay.Adapters.AdapterRecording;
+import com.example.root.whatdidusay.Database.DataBaseHelper;
+import com.example.root.whatdidusay.DropBoxHelpers.DropBoxHelpers;
+import com.example.root.whatdidusay.Helpers.CheckInternet;
+import com.example.root.whatdidusay.Helpers.Prefrences;
 import com.example.root.whatdidusay.Helpers.RecordingHelpers;
+import com.example.root.whatdidusay.Helpers.UploadFile;
+import com.example.root.whatdidusay.Models.ModelRecording;
+import com.example.root.whatdidusay.R;
 import com.example.root.whatdidusay.utils.IabHelper;
 import com.example.root.whatdidusay.utils.IabResult;
 
@@ -86,7 +93,6 @@ public class Home_Fragment extends Fragment {
                 "Avalon Bold.ttf");*/
 
 
-
         initViews(view);
         initObjects();
         initListeners();
@@ -97,6 +103,7 @@ public class Home_Fragment extends Fragment {
 
     /**
      * initialize all view objects
+     *
      * @param v
      */
 
@@ -124,7 +131,7 @@ public class Home_Fragment extends Fragment {
         String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsNOQtsf5M5E1WbMD70TVXyAN5CBFgCSK7dJV8DYnu3cRe+3zNbZUgwy6bhULMiCHFAfJwo78EwmlPgEmTk2jdI8AwWh3ut4XGdYn/zlGMu6LQs/dLDdWm8cSO32WldqyPyEEA4UW7XsbvzFYR8K+VNVU18X2ey+WCxA91baXSVEzJ4v3H8hTH79C3EzT6hlAauks3MKooUzV9c6AkEQ6VA36GVmj5D6uDpnclpOlvnV98vIPQexjiGGQI9fboluS5nXZZ/QIyz7eljmtMdDsd2MS7/rZPVVJ7+Ytk2w0oBOL1C0Q0CtOl+8WI8mOcm2IxE4aCWGrtBBSzOuqpGl5nwIDAQAB";
 
         dropBoxHelpers = new DropBoxHelpers(getActivity());
-        mIabHelper = new IabHelper(getActivity(),base64EncodedPublicKey);
+        mIabHelper = new IabHelper(getActivity(), base64EncodedPublicKey);
         mIabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
                 if (!result.isSuccess()) {
@@ -201,7 +208,6 @@ public class Home_Fragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
 
 
-
                         }
                     });
 
@@ -261,6 +267,7 @@ public class Home_Fragment extends Fragment {
 
     /**
      * export file to drop box
+     *
      * @param path
      */
     public void exportDropBox(String path) {

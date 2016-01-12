@@ -18,11 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.root.whatdidusay.Activities.RecordingActivity;
 import com.example.root.whatdidusay.Database.DataBaseHelper;
-import com.example.root.whatdidusay.Fragments.Home_Fragment;
+import com.example.root.whatdidusay.Helpers.RecordingHelpers;
 import com.example.root.whatdidusay.Models.ModelRecording;
 import com.example.root.whatdidusay.R;
-import com.example.root.whatdidusay.Helpers.RecordingHelpers;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +34,7 @@ import static com.example.root.whatdidusay.R.drawable.play_btn;
  * Created by Dottechnologies on 31/8/15.
  * This class is a bridge to set data to the list and delete and playing functionality is performed in this class
  */
-public class AdapterRecording extends BaseAdapter {
+public class AdapterRecordingFolder extends BaseAdapter {
 
     private LayoutInflater inflater = null;
     private View previousView;
@@ -45,14 +45,14 @@ public class AdapterRecording extends BaseAdapter {
     private Boolean statusPlaying;
     private int idSongPlaying;
     private MediaPlayer mPlayer = null;
-    private Home_Fragment fragment;
+    private RecordingActivity recordingActivity;
     private String [] exportMenuArray = {"Text" ,"Mail","DropBox"};
 
-    public AdapterRecording(Context c, ArrayList<ModelRecording> list,Home_Fragment frag) {
+    public AdapterRecordingFolder(Context c, ArrayList<ModelRecording> list, RecordingActivity activity) {
         mContext = c;
         inflater = LayoutInflater.from(c);
         mList = list;
-        fragment = frag;
+        recordingActivity = activity;
         statusPlaying = false;
         db = new DataBaseHelper(mContext);
         recordingHelpers = new RecordingHelpers();
@@ -95,16 +95,19 @@ public class AdapterRecording extends BaseAdapter {
         //  holder.time_text.setTypeface(avalon_regular);
         holder.record_time = (TextView) v.findViewById(R.id.record_time);
         //   holder.record_time.setTypeface(avalon_regular);
-        v.setTag(position);
-        v.setOnLongClickListener(new View.OnLongClickListener() {
+
+       /*v.setTag(position);
+       v.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
-            public boolean onLongClick(View v) {
-               // Toast.makeText(mContext,"Hello",Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+                // Toast.makeText(mContext,"Hello",Toast.LENGTH_LONG).show();
                 int pos = Integer.parseInt(v.getTag().toString());
                 showShareDialog(pos);
-                return false;
+
             }
-        });
+        });*/
 
         holder.title_tracklist.setTag(position);
         holder.title_tracklist.setOnClickListener(new View.OnClickListener() {
@@ -141,13 +144,11 @@ public class AdapterRecording extends BaseAdapter {
                     mList.get(idSongPlaying).setIsPlaying(true);
                     startPlaying(mList.get(idSongPlaying).getPath(), holder.play_tracklist_btn);
 
-
                 }
-
-
 
             }
         });
+
         holder.button_delete.setTag(position);
         holder.button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,13 +157,13 @@ public class AdapterRecording extends BaseAdapter {
                 if (mList.get(pos).isForDelete()) {
                     mList.get(pos).setIsForDelete(false);
                     holder.button_delete.setImageResource(R.drawable.ic_delete_uncheck);
-                    fragment.idsDelete.remove(mList.get(pos).getId());
-                    fragment.linkDelete.remove(mList.get(pos).getPath());
+                    recordingActivity.idsDelete.remove(mList.get(pos).getId());
+                    recordingActivity.linkDelete.remove(mList.get(pos).getPath());
                 } else {
                     mList.get(pos).setIsForDelete(true);
                     holder.button_delete.setImageResource(R.drawable.ic_delete_check);
-                    fragment.idsDelete.add(mList.get(pos).getId());
-                    fragment.linkDelete.add(mList.get(pos).getPath());
+                    recordingActivity.idsDelete.add(mList.get(pos).getId());
+                    recordingActivity.linkDelete.add(mList.get(pos).getPath());
                 }
 
             }
@@ -181,7 +182,9 @@ public class AdapterRecording extends BaseAdapter {
         }
 
 
-        if (!mList.get(position).getName().equals("")) {
+
+
+       /* if (!mList.get(position).getName().equals("")) {
             holder.title_tracklist.setText(mList.get(position).getName());
         } else {
             String titlePosition = "";
@@ -193,9 +196,9 @@ public class AdapterRecording extends BaseAdapter {
             }
 
             holder.title_tracklist.setText("Snippet " + titlePosition);
-        }
+        }*/
 
-
+        holder.title_tracklist.setText(mList.get(position).getName());
         holder.date_text.setText(mList.get(position).getDate());
         holder.time_text.setText(" "+mList.get(position).getTime());
         holder.record_time.setText(mList.get(position).getDuration());
@@ -234,6 +237,7 @@ public class AdapterRecording extends BaseAdapter {
     }
 
     protected void showInputDialog(int position) {
+
         final int pos = position;
 
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
@@ -243,7 +247,9 @@ public class AdapterRecording extends BaseAdapter {
         alertDialogBuilder.setTitle("File Name");
 
         final EditText editText = (EditText) promptView.findViewById(R.id.eDitFile);
+        TextView textEndDuration = (TextView) promptView.findViewById(R.id.textEndDuration);
 
+        textEndDuration.setText(mList.get(position).getDuration());
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -342,7 +348,8 @@ public class AdapterRecording extends BaseAdapter {
 
                                 break;
                             case 2:
-                                fragment.exportDropBox(mList.get(position).getPath());
+                                //Toast.makeText(mContext,""+mList.get(position).getPath(),Toast.LENGTH_LONG).show();
+                                recordingActivity.exportDropBox(mList.get(position).getPath());
                                 break;
                         }
                     }
@@ -353,7 +360,6 @@ public class AdapterRecording extends BaseAdapter {
     }
 
     private void showErrorDialog() {
-
 
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);

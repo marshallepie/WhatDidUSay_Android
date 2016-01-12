@@ -1,4 +1,4 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -25,6 +25,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.root.whatdidusay.Fragments.HomeFragment;
+import com.example.root.whatdidusay.Fragments.Info_Fragment;
+import com.example.root.whatdidusay.Fragments.Settings_Fragment;
+import com.example.root.whatdidusay.R;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
 import java.util.ArrayList;
@@ -187,10 +191,12 @@ public class SliderActivity extends SlidingFragmentActivity {
         final int pos = position;
 
         LayoutInflater layoutInflater = LayoutInflater.from(SliderActivity.this);
-        View promptView = layoutInflater.inflate(R.layout.layout_dailog_name_edit, null);
+        View promptView = layoutInflater.inflate(R.layout.layout_dailog_folder, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SliderActivity.this);
         alertDialogBuilder.setView(promptView);
         alertDialogBuilder.setTitle("Folder Name");
+
+
 
         final EditText editText = (EditText) promptView.findViewById(R.id.eDitFile);
         editText.setHint("Enter Folder Name");

@@ -1,4 +1,4 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.Window;
+
+import com.example.root.whatdidusay.Helpers.Prefrences;
+import com.example.root.whatdidusay.R;
 
 /**
  * Created by dottechnologies on 31/8/15.
@@ -36,6 +39,7 @@ public class SplashActivity extends Activity{
         {
             prefs.setBooleanPrefs(Prefrences.KEY_PREFRENCE_INIT,true);
             prefs.setIntPrefs(Prefrences.KEY_RECORD_DURATION, 10);
+            //prefs.setIntPrefs(Prefrences.KEY_RECORD_ID,0);
         }
 
 

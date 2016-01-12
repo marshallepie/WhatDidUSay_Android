@@ -1,6 +1,7 @@
 package com.example.root.whatdidusay.Helpers;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 
@@ -10,9 +11,9 @@ import java.io.File;
 public class FileHelpers {
 
     private final String groups = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
-            + ".What_did_you_say"+File.separator+".Groups";
+            + ".What_did_you_say"+File.separator+"Groups";
     private final String groupsDefault = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
-            + ".What_did_you_say"+File.separator+".Groups"+File.separator+"Default";
+            + ".What_did_you_say"+File.separator+"Groups"+File.separator+"Default";
 
     public FileHelpers() {
         File dirFile = new File(groups);
@@ -34,9 +35,11 @@ public class FileHelpers {
     }
 
     public void deleteFolder(String folderName){
+
         File dirFolder = new File(groups+File.separator+folderName);
         if (dirFolder.exists()) {
             dirFolder.delete();
+
         }
 
     }

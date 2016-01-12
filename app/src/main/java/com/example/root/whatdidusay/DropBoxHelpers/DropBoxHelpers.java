@@ -1,10 +1,11 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.DropBoxHelpers;
 
 import android.content.Context;
 
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
+import com.example.root.whatdidusay.Helpers.Prefrences;
 
 /**
  * Created by dottechnologies on 7/9/15.

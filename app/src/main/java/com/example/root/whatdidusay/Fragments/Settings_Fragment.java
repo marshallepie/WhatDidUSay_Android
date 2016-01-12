@@ -1,4 +1,4 @@
-package com.example.root.whatdidusay;
+package com.example.root.whatdidusay.Fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.example.root.whatdidusay.Helpers.Prefrences;
+import com.example.root.whatdidusay.R;
 
 /**
  * Created by root on 21/8/15.
