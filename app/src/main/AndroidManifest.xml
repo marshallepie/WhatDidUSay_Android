@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.root.whatdidusay">
+    package="com.marshallepie.root.whatdidusay">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -18,14 +18,14 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".Activities.SplashActivity">
+        <activity android:name="com.marshallepie.root.whatdidusay.Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.SliderActivity"></activity>
+        <activity android:name="com.marshallepie.root.whatdidusay.Activities.SliderActivity"></activity>
 
         <activity
             android:name="com.dropbox.client2.android.AuthActivity"
@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activities.RecordingActivity"
+        <activity android:name="com.marshallepie.root.whatdidusay.Activities.RecordingActivity"
             android:screenOrientation="portrait"></activity>
 
     </application>
