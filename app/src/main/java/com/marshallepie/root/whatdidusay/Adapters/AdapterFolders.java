@@ -10,17 +10,18 @@ import android.widget.TextView;
 import com.marshallepie.root.whatdidusay.R;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by dottechnologies on 6/1/16.
  */
 public class AdapterFolders extends BaseAdapter {
 
-    private File[] mlistFolders;
+    private ArrayList<File> mlistFolders;
     private LayoutInflater mInflater = null;
     private Context mContext;
 
-    public AdapterFolders(Context context, File[] list) {
+    public AdapterFolders(Context context, ArrayList<File> list) {
         mlistFolders = list;
         mContext = context;
         mInflater = LayoutInflater.from(mContext);
@@ -29,7 +30,7 @@ public class AdapterFolders extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mlistFolders.length;
+        return mlistFolders.size();
     }
 
     @Override
@@ -62,7 +63,7 @@ public class AdapterFolders extends BaseAdapter {
 
         }
 
-        holder.nameFolder.setText(mlistFolders[i].getName());
+        holder.nameFolder.setText(mlistFolders.get(i).getName());
 
 
         return view;

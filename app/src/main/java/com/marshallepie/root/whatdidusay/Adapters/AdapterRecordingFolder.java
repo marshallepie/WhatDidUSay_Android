@@ -258,8 +258,7 @@ public class AdapterRecordingFolder extends BaseAdapter {
                         if (!editString.equals("")) {
 
                             db.updateName(mList.get(pos).getId(), editString);
-                            mList.get(pos).setName(editString);
-                            notifyDataSetChanged();
+                            recordingActivity.notifyData();
 
                         } else {
                             showErrorDialog();

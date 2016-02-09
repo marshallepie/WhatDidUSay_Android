@@ -151,6 +151,7 @@ public class RecordingActivity extends Activity {
                 recordingHelpers.stopRecording();
                 recordingHelpers.startRecording(tempFilePath);
                 recordingHelpers.setTimeStarts();
+                handler.postDelayed(runnable,recordDuration);
 
             }
         };
@@ -395,6 +396,10 @@ public class RecordingActivity extends Activity {
         super.onDestroy();
         if (mHelper != null) mHelper.dispose();
         mHelper = null;
+
+        if(recordingHelpers.isRunning()){
+            stopFunction();
+        }
     }
 
     private void showShareDialog(final int position) {
@@ -498,6 +503,11 @@ public class RecordingActivity extends Activity {
                 Log.i("EROOR", "Error authenticating", e);
             }
         }
+    }
+
+    public void notifyData(){
+
+        new FetchDataBase().execute();
     }
 
     /**

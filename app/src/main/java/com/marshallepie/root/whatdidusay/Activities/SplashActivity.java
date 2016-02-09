@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.marshallepie.root.whatdidusay.Helpers.Prefrences;
 import com.marshallepie.root.whatdidusay.R;
@@ -39,6 +41,7 @@ public class SplashActivity extends Activity {
             prefs.setBooleanPrefs(Prefrences.KEY_PREFRENCE_INIT, true);
             prefs.setIntPrefs(Prefrences.KEY_RECORD_DURATION, 10);
             prefs.setBooleanPrefs(Prefrences.KEY_IN_APP, false);
+            prefs.setIntPrefs(Prefrences.KEY_FIRST_TIME_DILAOG,0);
             //prefs.setIntPrefs(Prefrences.KEY_RECORD_ID,0);
 
         }
@@ -63,5 +66,18 @@ public class SplashActivity extends Activity {
             }
         }, 3000);
 
+
+
+
+
     }
+
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
 }

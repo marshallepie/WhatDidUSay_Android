@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.marshallepie.root.whatdidusay.Fragments.HomeFragment;
 import com.marshallepie.root.whatdidusay.Fragments.Info_Fragment;
 import com.marshallepie.root.whatdidusay.Fragments.Settings_Fragment;
+import com.marshallepie.root.whatdidusay.Helpers.Prefrences;
 import com.marshallepie.root.whatdidusay.R;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
@@ -57,6 +58,8 @@ public class SliderActivity extends SlidingFragmentActivity {
     public static List<myFragmentsclass> myFragents = new ArrayList<myFragmentsclass>();
 
     private HomeFragment homeFragment;
+
+    private Prefrences prefs;
 
 
     @Override
@@ -148,7 +151,7 @@ public class SliderActivity extends SlidingFragmentActivity {
 
                 if (selectedItem.compareTo("Home") == 0) {
                     homeFragment = new HomeFragment();
-                    fragment = (Fragment)homeFragment;
+                    fragment = (Fragment) homeFragment;
                     wdys_text.setText("What Did U Say");
 
                 }
@@ -185,7 +188,32 @@ public class SliderActivity extends SlidingFragmentActivity {
             }
         });
 
+        prefs = new Prefrences(SliderActivity.this);
+        if(prefs.getInt(Prefrences.KEY_FIRST_TIME_DILAOG) == 0){
+            showDialog();
+        }
+
     }
+
+    private void showDialog() {
+        LayoutInflater layoutInflater = LayoutInflater.from(SliderActivity.this);
+        View promptView = layoutInflater.inflate(R.layout.first_time_dialog, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(SliderActivity.this);
+        builder.setView(promptView);
+        builder.setCancelable(false);
+        builder.setTitle("Instructions");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                prefs.setIntPrefs(Prefrences.KEY_FIRST_TIME_DILAOG, 1);
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
 
     protected void showInputDialog(int position) {
         final int pos = position;

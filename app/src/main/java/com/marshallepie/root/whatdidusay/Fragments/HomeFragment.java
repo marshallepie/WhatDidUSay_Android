@@ -29,6 +29,7 @@ import com.marshallepie.root.whatdidusay.Helpers.FileHelpers;
 import com.marshallepie.root.whatdidusay.R;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by Dottechnologies on 6/1/16.
@@ -41,8 +42,9 @@ public class HomeFragment extends Fragment {
     private ProgressDialog pDailog;
     private File[] folders;
     private AdapterFolders adapterFolders;
-    private File[] foldersArray;
+
     private DataBaseHelper database;
+    private ArrayList<File> folderList;
 
     @Nullable
     @Override
@@ -61,6 +63,7 @@ public class HomeFragment extends Fragment {
 
         listFolders = (SwipeMenuListView) view.findViewById(R.id.listFolders);
         fileHelpers = new FileHelpers();
+        folderList = new ArrayList<File>();
         database = new DataBaseHelper(getActivity());
 
         SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -96,13 +99,15 @@ public class HomeFragment extends Fragment {
                             Toast.makeText(getActivity(), "Cannot Delete \"Default\" folder", Toast.LENGTH_LONG).show();
                         } else {
                             new AlertDialog.Builder(getActivity()).setTitle("Delete Folder")
-                                    .setMessage("Do you really want to delete \"" + foldersArray[position].getName() + "\" folder")
+                                    .setMessage("Do you really want to delete \"" + folderList.get(position).getName() + "\" folder")
                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             //  Toast.makeText(getActivity(),"positon"+ position+" index" +index,Toast.LENGTH_LONG).show();
-                                            fileHelpers.deleteFolder(foldersArray[position].getName());
-                                            database.deleteRecordFolder(foldersArray[position].getName());
+
+                                            fileHelpers.deleteRecursive(folderList.get(position).getAbsoluteFile());
+                                            database.deleteRecordFolder(folderList.get(position).getName());
+
                                             new FetchFolders().execute();
                                         }
                                     })
@@ -125,11 +130,12 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Intent intent = new Intent(getActivity(), RecordingActivity.class);
-                intent.putExtra("TITLE", foldersArray[i].getName());
+                intent.putExtra("TITLE", folderList.get(i).getName());
                 startActivity(intent);
 
             }
         });
+
         new FetchFolders().execute();
     }
 
@@ -141,6 +147,7 @@ public class HomeFragment extends Fragment {
 
     public void createFolder(String folderName) {
         fileHelpers.makeNewFolder(folderName);
+
         new FetchFolders().execute();
 
     }
@@ -159,9 +166,17 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            foldersArray = null;
-            foldersArray = fileHelpers.fetchAllFolders();
-            adapterFolders = new AdapterFolders(getActivity(), foldersArray);
+
+
+            try {
+                folderList.clear();
+                for (int i = 0; i < fileHelpers.fetchAllFolders().length; i++) {
+                    folderList.add(fileHelpers.fetchAllFolders()[i]);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
 
             return null;
         }
@@ -169,7 +184,9 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
             pDailog.dismiss();
+            adapterFolders = new AdapterFolders(getActivity(), folderList);
             listFolders.setAdapter(adapterFolders);
         }
     }

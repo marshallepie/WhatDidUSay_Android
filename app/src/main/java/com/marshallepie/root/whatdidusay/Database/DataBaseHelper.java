@@ -123,6 +123,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
+
                 ModelRecording record = new ModelRecording();
                 record.setId(cursor.getString(cursor.getColumnIndex(KEY_ID)));
                 record.setName(cursor.getString(cursor.getColumnIndex(KEY_RECORD_NAME)));
@@ -133,7 +134,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 record.setDuration(cursor.getString(cursor.getColumnIndex(KEY_RECORD_DURATION)));
                 record.setIsForDelete(false);
                 record.setIsPlaying(false);
-
+                Log.e("fle path","");
                 recordtList.add(record);
             } while (cursor.moveToNext());
         }

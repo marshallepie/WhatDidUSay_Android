@@ -1,5 +1,6 @@
 package com.marshallepie.root.whatdidusay.Helpers;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -25,12 +26,27 @@ public class RecordingHelpers {
     private MediaPlayer mPlayer = null;
 
     private final String TEMP_FOLDER = "";
-    private final String mainDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
+    private  String mainDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
             + ".What_did_you_say";
-    private final String tempDir = mainDir+File.separator+"Temp";
+    private  String tempDir = mainDir+File.separator+"Temp";
     private long startTime;
 
+    /*public RecordingHelpers(Context context) {
+        mainDir = context.getFilesDir() + File.separator
+                + ".What_did_you_say";
+        tempDir = mainDir+File.separator+"Temp";
 
+        File dirFile = new File(mainDir);
+        File tempDirFile = new File(tempDir);
+        if (!dirFile.exists()){
+            dirFile.mkdirs();
+        }
+        if (!tempDirFile.exists()){
+            tempDirFile.mkdirs();
+        }
+
+    }
+*/
     public RecordingHelpers() {
         File dirFile = new File(mainDir);
         File tempDirFile = new File(tempDir);
@@ -110,6 +126,21 @@ public class RecordingHelpers {
     public void stopPlaying() {
         mPlayer.release();
         mPlayer = null;
+    }
+
+
+    public boolean isRunning(){
+
+        boolean status;
+
+        if(mRecorder == null){
+            status = false;
+        }else{
+            status = true;
+        }
+
+        return status;
+
     }
 
     public void moveIn (String pathInternal, String pathExternal) {

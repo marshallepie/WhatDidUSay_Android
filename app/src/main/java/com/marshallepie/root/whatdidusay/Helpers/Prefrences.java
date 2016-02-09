@@ -16,6 +16,7 @@ public class Prefrences {
 	public static String KEY_RECORD_DURATION = "KEY_RECORD_DURATION";
 	public static String KEY_RECORD_ID = "KEY_RECORD_ID";
 	public static String KEY_IN_APP = "KEY_IN_APP";
+	public static String KEY_FIRST_TIME_DILAOG = "KEY_FIRST_TIME";
 
 	public static  String ACCESS_KEY_NAME = "ACCESS_KEY";
 	public static  String ACCESS_SECRET_NAME = "ACCESS_SECRET";
