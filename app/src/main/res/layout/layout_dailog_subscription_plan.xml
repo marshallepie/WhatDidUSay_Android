@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Subscription Plans"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio_plan1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:checked="false"
+                    android:paddingRight="10dp" />
+
+                <TextView
+                    android:id="@+id/text_plan1_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/radio_plan1"
+                    android:text="Record 50 Snippets"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/text_plan1_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_plan1_title"
+                    android:layout_toRightOf="@+id/radio_plan1"
+                    android:text="Record Upto 50 Snippets"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/text_plan1_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/text_plan1_description"
+                    android:text="INR 250"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="15sp" />
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio_plan2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:paddingRight="10dp" />
+
+                <TextView
+                    android:id="@+id/text_plan2_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/radio_plan2"
+                    android:text="Record 50 Snippets"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/text_plan2_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_plan2_title"
+                    android:layout_toRightOf="@+id/radio_plan2"
+                    android:text="Record Upto 50 Snippets"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/text_plan2_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/text_plan2_description"
+                    android:text="INR 250"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="15sp" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio_plan3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:paddingRight="10dp" />
+
+                <TextView
+                    android:id="@+id/text_plan3_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/radio_plan3"
+                    android:text="Record 50 Snippets"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/text_plan3_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_plan3_title"
+                    android:layout_toRightOf="@+id/radio_plan3"
+                    android:text="Record Upto 50 Snippets"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/text_plan3_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/text_plan3_description"
+                    android:text="INR 250"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonCancelSubscription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/buttonOkSubscription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Ok" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -17,10 +17,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Telephony;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +51,7 @@ import com.marshallepie.root.whatdidusay.Utils.Purchase;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dottechnologies on 7/1/16.
@@ -91,17 +96,37 @@ public class RecordingActivity extends Activity {
     private static final String TAG =
             "com.example.root.whatdidusay.Activities.RecordingActivity";
     IabHelper mHelper;
-    static final String ITEM_SKU = "com.marshallepie.root.whatdidusay";
+    static String ITEM_SKU = "com.marshallepie.root.whatdidusay";
+    static final String ITEM_SKU_50_SNIPPETS = "sku.50.snippets";
+    static final String ITEM_SKU_200_SNIPPETS = "sku.200.snippets";
+    static final String ITEM_SKU_UNLIMITED_SNIPPETS = "sku.unlimited.snippets";
+
     IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener;
     IabHelper.QueryInventoryFinishedListener mReceivedInventoryListener;
     IabHelper.OnConsumeFinishedListener mConsumeFinishedListener;
+
+    private AlertDialog dialogSubscription;
+    private AlertDialog.Builder builderSubscription;
+
+    private TextView textPlan1Title;
+    private TextView textPlan2Title;
+    private TextView textPlan3Title;
+
+    private TextView textPlan1Description;
+    private TextView textPlan2Description;
+    private TextView textPlan3Description;
+
+    private TextView textPlan1Price;
+    private TextView textPlan2Price;
+    private TextView textPlan3Price;
+
+    private int radioPlanSelection = 1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recording);
-
 
         initViews();
         initObjects();
@@ -151,7 +176,7 @@ public class RecordingActivity extends Activity {
                 recordingHelpers.stopRecording();
                 recordingHelpers.startRecording(tempFilePath);
                 recordingHelpers.setTimeStarts();
-                handler.postDelayed(runnable,recordDuration);
+                handler.postDelayed(runnable, recordDuration);
 
             }
         };
@@ -174,6 +199,91 @@ public class RecordingActivity extends Activity {
                 }
             }
         });
+        View viewDialogSubscription = LayoutInflater.from(RecordingActivity.this).inflate(R.layout.layout_dailog_subscription_plan, null);
+        builderSubscription = new AlertDialog.Builder(RecordingActivity.this);
+        builderSubscription.setView(viewDialogSubscription);
+        builderSubscription.setCancelable(false);
+        Button buttonCancelSubscription = (Button) viewDialogSubscription.findViewById(R.id.buttonCancelSubscription);
+        Button buttonOkSubscription = (Button) viewDialogSubscription.findViewById(R.id.buttonOkSubscription);
+
+        final RadioButton radioPlan1 = (RadioButton) viewDialogSubscription.findViewById(R.id.radio_plan1);
+        final RadioButton radioPlan2 = (RadioButton) viewDialogSubscription.findViewById(R.id.radio_plan2);
+        final RadioButton radioPlan3 = (RadioButton) viewDialogSubscription.findViewById(R.id.radio_plan3);
+
+        textPlan1Title = (TextView) viewDialogSubscription.findViewById(R.id.text_plan1_title);
+        textPlan2Title = (TextView) viewDialogSubscription.findViewById(R.id.text_plan2_title);
+        textPlan3Title = (TextView) viewDialogSubscription.findViewById(R.id.text_plan3_title);
+
+        textPlan1Description = (TextView) viewDialogSubscription.findViewById(R.id.text_plan1_description);
+        textPlan2Description = (TextView) viewDialogSubscription.findViewById(R.id.text_plan2_description);
+        textPlan3Description = (TextView) viewDialogSubscription.findViewById(R.id.text_plan3_description);
+
+        textPlan1Price = (TextView) viewDialogSubscription.findViewById(R.id.text_plan1_price);
+        textPlan2Price = (TextView) viewDialogSubscription.findViewById(R.id.text_plan2_price);
+        textPlan3Price = (TextView) viewDialogSubscription.findViewById(R.id.text_plan3_price);
+        radioPlan1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioPlanSelection = 1;
+                ITEM_SKU = ITEM_SKU_50_SNIPPETS;
+                radioPlan1.setChecked(true);
+                radioPlan2.setChecked(false);
+                radioPlan3.setChecked(false);
+            }
+        });
+        radioPlan2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioPlanSelection = 2;
+                ITEM_SKU = ITEM_SKU_200_SNIPPETS;
+                radioPlan1.setChecked(false);
+                radioPlan2.setChecked(true);
+                radioPlan3.setChecked(false);
+            }
+        });
+
+        radioPlan3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                radioPlanSelection = 3;
+                ITEM_SKU = ITEM_SKU_UNLIMITED_SNIPPETS;
+                radioPlan1.setChecked(false);
+                radioPlan2.setChecked(false);
+                radioPlan3.setChecked(true);
+            }
+        });
+
+
+        buttonCancelSubscription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialogSubscription.dismiss();
+            }
+        });
+        buttonOkSubscription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (radioPlan1.isChecked() || radioPlan2.isChecked() || radioPlan3.isChecked()) {
+                    dialogSubscription.dismiss();
+                    mHelper.launchPurchaseFlow(RecordingActivity.this, ITEM_SKU, 10001,
+                            mPurchaseFinishedListener, "mypurchasetoken");
+                } else {
+                    Toast.makeText(RecordingActivity.this, "Please select Plan", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+      /*  builderSubscription.setPositiveButton(android.R.string.ok, null);
+        builderSubscription.setNegativeButton("Unlock", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                                *//*mHelper.launchPurchaseFlow(RecordingActivity.this, ITEM_SKU, 10001,
+                                        mPurchaseFinishedListener, "mypurchasetoken");*//*
+
+
+            }
+        });*/
+        dialogSubscription = builderSubscription.create();
 
         new FetchDataBase().execute();
 
@@ -212,12 +322,23 @@ public class RecordingActivity extends Activity {
                 if (result.isFailure()) {
                     // Handle error
                     return;
-                } else if (purchase.getSku().equals(ITEM_SKU)) {
+                } else if (purchase.getSku().equals(ITEM_SKU_50_SNIPPETS)) {
 
                     // on success  code goes here
                     Log.e(TAG, "mPurchaseFinishedListener");
+                    prefs.setBooleanPrefs(Prefrences.KEY_IN_APP_50, true);
+                    Toast.makeText(RecordingActivity.this, "Unlocked Limit. Record Up to 50", Toast.LENGTH_LONG).show();
+                    // mHelper.queryInventoryAsync(mReceivedInventoryListener);
 
-                    mHelper.queryInventoryAsync(mReceivedInventoryListener);
+                } else if (purchase.getSku().equals(ITEM_SKU_200_SNIPPETS)) {
+
+                    prefs.setBooleanPrefs(Prefrences.KEY_IN_APP_200, true);
+                    Toast.makeText(RecordingActivity.this, "Unlocked Limit. Record Up to 200", Toast.LENGTH_LONG).show();
+
+                } else if (purchase.getSku().equals(ITEM_SKU_UNLIMITED_SNIPPETS)) {
+
+                    prefs.setBooleanPrefs(Prefrences.KEY_IN_APP_UNLIMITED, true);
+                    Toast.makeText(RecordingActivity.this, "Unlocked Limits. Record Unlimited", Toast.LENGTH_LONG).show();
 
                 }
 
@@ -233,8 +354,22 @@ public class RecordingActivity extends Activity {
                     // Handle failure
                 } else {
                     Log.e(TAG, "mReceivedInventoryListener");
-                    mHelper.consumeAsync(inventory.getPurchase(ITEM_SKU),
-                            mConsumeFinishedListener);
+                    textPlan1Title.setText(inventory.getSkuDetails(ITEM_SKU_50_SNIPPETS).getTitle());
+                    textPlan1Description.setText(inventory.getSkuDetails(ITEM_SKU_50_SNIPPETS).getDescription());
+                    textPlan1Price.setText(inventory.getSkuDetails(ITEM_SKU_50_SNIPPETS).getPrice());
+
+                    textPlan2Title.setText(inventory.getSkuDetails(ITEM_SKU_200_SNIPPETS).getTitle());
+                    textPlan2Description.setText(inventory.getSkuDetails(ITEM_SKU_200_SNIPPETS).getDescription());
+                    textPlan2Price.setText(inventory.getSkuDetails(ITEM_SKU_200_SNIPPETS).getPrice());
+
+                    textPlan3Title.setText(inventory.getSkuDetails(ITEM_SKU_UNLIMITED_SNIPPETS).getTitle());
+                    textPlan3Description.setText(inventory.getSkuDetails(ITEM_SKU_UNLIMITED_SNIPPETS).getDescription());
+                    textPlan3Price.setText(inventory.getSkuDetails(ITEM_SKU_UNLIMITED_SNIPPETS).getPrice());
+
+
+                    dialogSubscription.show();
+                    /*mHelper.consumeAsync(inventory.getPurchase(ITEM_SKU),
+                            mConsumeFinishedListener);*/
                 }
             }
         };
@@ -262,9 +397,79 @@ public class RecordingActivity extends Activity {
         record_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (prefs.getBoolean(Prefrences.KEY_IN_APP)) {
+
+                if (prefs.getBooleanDefaultFalse(Prefrences.KEY_IN_APP_UNLIMITED)) {
                     new RecordTask().execute();
+                    Log.e("KEY_IN_APP_UNLIMITED", "KEY_IN_APP_UNLIMITED");
+
+                } else if (prefs.getBooleanDefaultFalse(Prefrences.KEY_IN_APP_200)) {
+                    Log.e("KEY_IN_APP_200", "KEY_IN_APP_200");
+                    if (db.getRecordCount() >= 200) {
+                        stopFunction();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RecordingActivity.this);
+                        builder.setTitle("Limit Exceeds");
+                        builder.setCancelable(false);
+                        builder.setMessage("Unlock the limit for unlimited recording");
+                        builder.setPositiveButton(android.R.string.ok, null);
+                        builder.setNegativeButton("Unlock", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                /*mHelper.launchPurchaseFlow(RecordingActivity.this, ITEM_SKU, 10001,
+                                        mPurchaseFinishedListener, "mypurchasetoken");*/
+                                List additionalSkuList = new ArrayList();
+                                additionalSkuList.add(ITEM_SKU_50_SNIPPETS);
+                                additionalSkuList.add(ITEM_SKU_200_SNIPPETS);
+                                additionalSkuList.add(ITEM_SKU_UNLIMITED_SNIPPETS);
+
+                                mHelper.queryInventoryAsync(true, additionalSkuList,
+                                        mReceivedInventoryListener);
+
+                                //dialogSubscription.show();
+
+
+                            }
+                        });
+                        builder.show();
+                    } else {
+                        new RecordTask().execute();
+                    }
+
+
+                } else if (prefs.getBooleanDefaultFalse(Prefrences.KEY_IN_APP_50)) {
+                    Log.e("KEY_IN_APP_50", "KEY_IN_APP_50");
+                    if (db.getRecordCount() >= 50) {
+                        stopFunction();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RecordingActivity.this);
+                        builder.setTitle("Limit Exceeds");
+                        builder.setCancelable(false);
+                        builder.setMessage("Unlock the limit for unlimited recording");
+                        builder.setPositiveButton(android.R.string.ok, null);
+                        builder.setNegativeButton("Unlock", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                /*mHelper.launchPurchaseFlow(RecordingActivity.this, ITEM_SKU, 10001,
+                                        mPurchaseFinishedListener, "mypurchasetoken");*/
+                                List additionalSkuList = new ArrayList();
+                                additionalSkuList.add(ITEM_SKU_50_SNIPPETS);
+                                additionalSkuList.add(ITEM_SKU_200_SNIPPETS);
+                                additionalSkuList.add(ITEM_SKU_UNLIMITED_SNIPPETS);
+
+                                mHelper.queryInventoryAsync(true, additionalSkuList,
+                                        mReceivedInventoryListener);
+
+                                // dialogSubscription.show();
+
+
+                            }
+                        });
+                        builder.show();
+                    } else {
+                        new RecordTask().execute();
+                    }
+
+
                 } else {
+                    Log.e("3", "3");
                     if (db.getRecordCount() >= 3) {
                         stopFunction();
                         AlertDialog.Builder builder = new AlertDialog.Builder(RecordingActivity.this);
@@ -275,8 +480,20 @@ public class RecordingActivity extends Activity {
                         builder.setNegativeButton("Unlock", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mHelper.launchPurchaseFlow(RecordingActivity.this, ITEM_SKU, 10001,
-                                        mPurchaseFinishedListener, "mypurchasetoken");
+                                /*mHelper.launchPurchaseFlow(RecordingActivity.this, ITEM_SKU, 10001,
+                                        mPurchaseFinishedListener, "mypurchasetoken");*/
+
+                                List additionalSkuList = new ArrayList();
+                                additionalSkuList.add(ITEM_SKU_50_SNIPPETS);
+                                additionalSkuList.add(ITEM_SKU_200_SNIPPETS);
+                                additionalSkuList.add(ITEM_SKU_UNLIMITED_SNIPPETS);
+
+                                mHelper.queryInventoryAsync(true, additionalSkuList,
+                                        mReceivedInventoryListener);
+
+
+                                // dialogSubscription.show();
+
 
                             }
                         });
@@ -397,7 +614,7 @@ public class RecordingActivity extends Activity {
         if (mHelper != null) mHelper.dispose();
         mHelper = null;
 
-        if(recordingHelpers.isRunning()){
+        if (recordingHelpers.isRunning()) {
             stopFunction();
         }
     }
@@ -505,7 +722,7 @@ public class RecordingActivity extends Activity {
         }
     }
 
-    public void notifyData(){
+    public void notifyData() {
 
         new FetchDataBase().execute();
     }

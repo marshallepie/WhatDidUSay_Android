@@ -1,2 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/libs/internal_impl-22.2.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1_ee26bf771e1639103bd2c6b1f0d56a8a14836363.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="0632f06970823b7e3436f649bfa65b47035c91d0">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0_28c794526b0043aa9e46de68d1a80681554a3325.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="2a7e47da654546f9457deb6132364f1bf33a1857">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-maps-8.1.0_f08fcf22309c76d5600dfd306c30ecfa1a37b802.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/libs/json_simple-1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5e303a03d04e6788dddfa3655272580ae0fc13bb">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/json_simple-1.1_8ab43831ff9fe477b19bd1fdb93c6d362d42a217.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d294caf562c4c678b2ef351662a0ca6f1a4d06c0">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-identity-8.1.0_26c2ccee24f8db886769964791efa46122364603.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="82825756edeeb3b56b15e73b2edd56e93da5a444">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-base-8.1.0_5ecfc4e39e6b7fda8381cd32a71ba2419d20945a.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="9cf8c0ef60847621c7ad00b4f78dbfc9daba4af2">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-fitness-8.1.0_fefb3b9d52f00e23fe571cc60f10d47d65dd1b9c.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="95758a2905669affbffc5ddd262921d375674fad">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-analytics-8.1.0_9baa02022eedaffce9b66ab8f9dd0fa3d2ca677e.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="dcb5b75baf05d92e61d5706737200ee55949f97b">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-gcm-8.1.0_e3ab1da158edd0fa85b28ec7348e96ae58fdd3bc.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3aed37c38c56679602255dd72ef356da5d327cda">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-location-8.1.0_46a2b83551937e1d7cae0be7528e7786a06006e4.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-22.2.1_0207f34a7a8331bf66811b3515063832c93fc438.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="997773777cf3904c11d6764fe3b7668538220e49">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-ads-8.1.0_c592050c0fdc9d9d77d7e569b2c7fef8dbf44a0a.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3178362320bcf51228835b60ff978efadfd1f783">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-cast-8.1.0_8f5410e17ef5a55014f1d3b3cec079875963e0ce.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="97f3b099801a9ad9d70e835b9125273e986eb68d">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-wearable-8.1.0_48f7ae9b0b1976c5aafdc62494d9f1310c6a6346.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3c729e6d76a36c5dc27e6a4c4009296f49eaa88a">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-drive-8.1.0_4dbc7d2acb11e312cf93783455f8198c54077adf.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-measurement/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="482de223655d06253cc6a4955d653f8994169500">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-measurement-8.1.0_e3e9c86c4b8bf58bdbaf8104dd5b35a7d5e0b534.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f8efd0096475e0daf054267b61544e10dc776503">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-22.2.1_c882de2f7f86b855c0cb3476cd33a8a3272dbc58.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="dcf8c83c3dead00a6c4fe313e95f7aaca20dc641">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.android.support-mediarouter-v7-22.2.0_f764af0bc741e044fe2490f4c55e21a8984f00b5.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b92002cb2f0e11a226ac5bac6dff1dc2a9d0b774">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-appinvite-8.1.0_217c02ba312137a40f79ce27c293673ffb86ea43.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-vision/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="17449c47df35c754b257532052f1270c444f7993">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-vision-8.1.0_94b016c211b5c51673d380943111bb3e77db0dab.jar" />
+    </item>
+    <item
+        jar="/home/dotechws16/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1_8b3d465010a9f509d6a8ddeb706e158ed12003e8.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.baoyz.swipemenulistview/library/1.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="8ec8378e8d7aa3104f60823e6350f2728d3609ba">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.baoyz.swipemenulistview-library-1.3.0_702832eb0e094cdbcc8e46ec9d7bf47bb88e3220.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d61920aba361832a9545a43fa8c9453eb02f18f7">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-plus-8.1.0_5f037eb78f3cb2e0e6596c1c42e6a82a0bc75550.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3b05c18f60969ecc2ba49c0409c4b96be2d9cb0c">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-safetynet-8.1.0_09a1e0aa59185885a296f71242f9b3763d40ac35.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d0dda274b703dd9c5bb056867649d22b4171ae7d">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-basement-8.1.0_07f53ab50fb8de41c2dfb70c5db5c572ba628166.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="325788a04b436a0bccbc5b4c54cf0f12ebdcbd2d">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-wallet-8.1.0_69ab294908f44d39e6da4379c2649d5aa0053fcd.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="041d93cf0533591c29d1d7263b2fa114dbfb20bd">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-nearby-8.1.0_9a1044609f2250ad738237ab43c6d0e29cd955d4.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4477ea44f5ec5ad064022a22691732d7638ff197">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-appindexing-8.1.0_59dfebe34a682c3f18a1aacbb8efba5226ad3da8.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/libs/dropbox-android-sdk-1.6.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="986e7a58e925c6f91b88ae8d3224a0550b65acc7">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/dropbox-android-sdk-1.6.3_1fe18023909b587c7092b8201c4fa7fd32da09fc.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="993834cb17d07d51b92db89d2c330243592ebf77">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-games-8.1.0_602234bc49f9ec69c69e5c70ac05a24aee3cdee1.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/WhatDidUSay_Android/libraryy_2/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="ee8b6c75039cb0d57112309e94ad59d95deb7f4c">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/WhatDidUSay_Android-libraryy_2-unspecified_ad58011019f3ef3028526f78f04f422b19909f51.jar" />
+    </item>
+    <item
+        jar="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d93480da1d303122ee67dc3bc23e6297bdef9951">
+        <dex dex="/media/dotechws16/DATA/What Did u say/WhatDidUSay_Android/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-panorama-8.1.0_620e75a566be826f72f84c104b314ba3abaad07a.jar" />
+    </item>
+
+</items>
