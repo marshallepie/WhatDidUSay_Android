@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg">
+
+
 
     <RelativeLayout
         android:id="@+id/rel_top"
@@ -30,6 +34,8 @@
             android:textColor="#e9e9e9"
             android:textSize="20sp" />
 
+
+
         <ImageView
             android:id="@+id/delete_btn"
             android:layout_width="wrap_content"
@@ -41,12 +47,25 @@
 
     </RelativeLayout>
 
+    <ImageButton
+        android:id="@+id/earButton"
+        android:layout_width="70dp"
+        android:visibility="gone"
+        android:layout_height="70dp"
+        android:scaleType="fitCenter"
+        android:layout_marginBottom="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rel_top"
+        android:src="@drawable/ear"
+        android:background="@android:color/white"
+        />
+
     <TextView
         android:id="@+id/tExtStatus"
         android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:text="No Action"
-        android:layout_below="@+id/rel_top"
+        android:layout_below="@+id/earButton"
         android:layout_height="wrap_content" />
 
 
@@ -68,12 +87,14 @@
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/play_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
+
             android:layout_weight="1"
             android:src="@drawable/rec_start_btn" />
 
@@ -126,5 +147,61 @@
         android:textColor="@android:color/white"
         android:text="No Recordings !"/>
 
+
+    <!--new code this layout is used to show transparent screen over recording activity-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:background="#98000000"
+        android:id="@+id/overlayingLinearLayout"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/imageButtonOverlayingStop"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/stop_button1"
+            />
+
+        <ImageView
+            android:id="@+id/imageViewListeningOverlaying"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/listent_text_logo"
+            android:layout_gravity="center_horizontal"
+            android:textSize="30dp"
+            android:textColor="@android:color/white"
+            />
+
+        <ImageView
+            android:id="@+id/overlayingBigIcon"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/overlayingTapToListenTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TAP TO SAVE"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal"
+            android:textSize="25dp"
+            android:textColor="@android:color/white"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

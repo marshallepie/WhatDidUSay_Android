@@ -10,6 +10,8 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -22,7 +24,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -39,6 +43,7 @@ import com.marshallepie.root.whatdidusay.Helpers.CheckInternet;
 import com.marshallepie.root.whatdidusay.Database.DataBaseHelper;
 import com.marshallepie.root.whatdidusay.DropBoxHelpers.DropBoxHelpers;
 import com.marshallepie.root.whatdidusay.Helpers.RecordingHelpers;
+import com.marshallepie.root.whatdidusay.Interfaces.EarButtonInterface;
 import com.marshallepie.root.whatdidusay.Models.ModelRecording;
 import com.marshallepie.root.whatdidusay.Helpers.Prefrences;
 import com.marshallepie.root.whatdidusay.R;
@@ -57,7 +62,7 @@ import java.util.List;
  * Created by dottechnologies on 7/1/16.
  */
 
-public class RecordingActivity extends Activity {
+public class RecordingActivity extends Activity implements EarButtonInterface {
 
     private ImageView back_btn;
     private TextView title_text;
@@ -77,6 +82,9 @@ public class RecordingActivity extends Activity {
     private final String TAG_NO_ACTION = "No Action";
     private final String TAG_MONITORING = "Monitoring";
     private final String TAG_STORING = "Storing";
+
+
+    AdapterRecordingFolder adapterRecordingFolder;
 
     private Prefrences prefs;
     private DataBaseHelper db;
@@ -120,6 +128,14 @@ public class RecordingActivity extends Activity {
     private TextView textPlan2Price;
     private TextView textPlan3Price;
 
+    private LinearLayout overlayingLinearLayout;
+    private ImageButton overlayingstopImageButton,earButton;
+    private ImageView overlayingListeningImageView,overlayingBigIconImageView;
+    private TextView overlayingTapToStopTextView;
+    OverlayingViewsClickListener listener;
+
+    int dialogCount=0;
+
     private int radioPlanSelection = 1;
 
 
@@ -132,36 +148,106 @@ public class RecordingActivity extends Activity {
         initObjects();
         initListners();
 
+        playFunction(1);
 
     }
 
     private void initViews() {
+        recordingHelpers = new RecordingHelpers();
 
-        back_btn = (ImageView) findViewById(R.id.back_btn);
-        title_text = (TextView) findViewById(R.id.title_text);
-        mListView = (SwipeMenuListView) findViewById(R.id.tracklist);
-        play_btn = (ImageView) findViewById(R.id.play_btn);
-        record_btn = (ImageView) findViewById(R.id.record_btn);
-        stop_btn = (ImageView) findViewById(R.id.stop_btn);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        textEmpty = (TextView) findViewById(R.id.textEmpty);
-        tExtStatus = (TextView) findViewById(R.id.tExtStatus);
-        delete_btn = (ImageView) findViewById(R.id.delete_btn);
+        overlayingLinearLayout = (LinearLayout) findViewById(R.id.overlayingLinearLayout);
+        overlayingListeningImageView = (ImageView) findViewById(R.id.imageViewListeningOverlaying);
+        overlayingstopImageButton = (ImageButton) findViewById(R.id.imageButtonOverlayingStop);
+        overlayingTapToStopTextView = (TextView) findViewById(R.id.overlayingTapToListenTextView);
+        overlayingBigIconImageView = (ImageView) findViewById(R.id.overlayingBigIcon);
+        earButton = (ImageButton) findViewById(R.id.earButton);
+
+
+        back_btn = (ImageView)              findViewById(R.id.back_btn);
+        title_text = (TextView)             findViewById(R.id.title_text);
+        mListView = (SwipeMenuListView)     findViewById(R.id.tracklist);
+        play_btn = (ImageView)              findViewById(R.id.play_btn);
+        record_btn = (ImageView)            findViewById(R.id.record_btn);
+        stop_btn = (ImageView)              findViewById(R.id.stop_btn);
+        progressBar = (ProgressBar)         findViewById(R.id.progressBar);
+        textEmpty = (TextView)              findViewById(R.id.textEmpty);
+        tExtStatus = (TextView)             findViewById(R.id.tExtStatus);
+        delete_btn = (ImageView)            findViewById(R.id.delete_btn);
         record_btn.setAlpha(0.5f);
         stop_btn.setAlpha(0.5f);
         play_btn.setEnabled(true);
         record_btn.setEnabled(false);
         stop_btn.setEnabled(false);
 
+        listener = new OverlayingViewsClickListener();
+        overlayingTapToStopTextView.setOnClickListener(listener);
+        overlayingstopImageButton.setOnClickListener(listener);
+        overlayingListeningImageView.setOnClickListener(listener);
+        overlayingBigIconImageView.setOnClickListener(listener);
+        overlayingLinearLayout.setOnClickListener(listener);
 
+        earButton.setOnClickListener(listener);   // earButton is not in Overlaying layout
+    }
+
+    @Override
+    public void disableEarButton() {
+        earButton.setEnabled(false);
+    }
+
+    @Override
+    public void enableEarButton() {
+        earButton.setEnabled(true);
+    }
+
+
+    class OverlayingViewsClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.imageViewListeningOverlaying:
+                    earButton.setVisibility(View.GONE);
+                    record_btn.performClick();
+                    break;
+                case R.id.imageButtonOverlayingStop:
+                    stop_btn.performClick();
+                    overlayingLinearLayout.setVisibility(View.GONE);
+                    earButton.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.overlayingTapToListenTextView:
+                    record_btn.performClick();
+                    earButton.setVisibility(View.GONE);
+                    break;
+                case R.id.overlayingBigIcon:
+                    record_btn.performClick();
+                    earButton.setVisibility(View.GONE);
+                    break;
+
+                case R.id.overlayingLinearLayout:
+                    record_btn.performClick();
+                    earButton.setVisibility(View.GONE);
+                    break;
+                case R.id.earButton:
+                    if (!earButton.isEnabled()) {
+                        Toast.makeText(RecordingActivity.this,
+                                "Kindly stop the audio first",
+                                Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                    if(earButton.isEnabled()) {
+                        playFunction(1);
+                        overlayingLinearLayout.setVisibility(View.VISIBLE);
+                        earButton.setVisibility(View.GONE);
+                    }
+                    break;
+            }
+        }
     }
 
 
     private void initObjects() {
-
         folderName = getIntent().getStringExtra("TITLE");
         title_text.setText(folderName);
-        recordingHelpers = new RecordingHelpers();
         db = new DataBaseHelper(RecordingActivity.this);
         idsDelete = new ArrayList<String>();
         linkDelete = new ArrayList<String>();
@@ -172,12 +258,10 @@ public class RecordingActivity extends Activity {
         runnable = new Runnable() {
             @Override
             public void run() {
-
                 recordingHelpers.stopRecording();
                 recordingHelpers.startRecording(tempFilePath);
                 recordingHelpers.setTimeStarts();
                 handler.postDelayed(runnable, recordDuration);
-
             }
         };
 
@@ -261,6 +345,7 @@ public class RecordingActivity extends Activity {
                 dialogSubscription.dismiss();
             }
         });
+
         buttonOkSubscription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -283,6 +368,7 @@ public class RecordingActivity extends Activity {
 
             }
         });*/
+
         dialogSubscription = builderSubscription.create();
 
         new FetchDataBase().execute();
@@ -308,8 +394,8 @@ public class RecordingActivity extends Activity {
         play_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                playFunction();
+                if (!recordingHelpers.isPlaying)
+                    playFunction(0);
 
             }
         });
@@ -405,7 +491,8 @@ public class RecordingActivity extends Activity {
                 } else if (prefs.getBooleanDefaultFalse(Prefrences.KEY_IN_APP_200)) {
                     Log.e("KEY_IN_APP_200", "KEY_IN_APP_200");
                     if (db.getRecordCount() >= 200) {
-                        stopFunction();
+                        //if (recordingHelpers.isPlaying)
+                        // stopFunction();
                         AlertDialog.Builder builder = new AlertDialog.Builder(RecordingActivity.this);
                         builder.setTitle("Limit Exceeds");
                         builder.setCancelable(false);
@@ -438,7 +525,8 @@ public class RecordingActivity extends Activity {
                 } else if (prefs.getBooleanDefaultFalse(Prefrences.KEY_IN_APP_50)) {
                     Log.e("KEY_IN_APP_50", "KEY_IN_APP_50");
                     if (db.getRecordCount() >= 50) {
-                        stopFunction();
+                        //if (recordingHelpers.isPlaying)
+                        //stopFunction();
                         AlertDialog.Builder builder = new AlertDialog.Builder(RecordingActivity.this);
                         builder.setTitle("Limit Exceeds");
                         builder.setCancelable(false);
@@ -456,9 +544,6 @@ public class RecordingActivity extends Activity {
 
                                 mHelper.queryInventoryAsync(true, additionalSkuList,
                                         mReceivedInventoryListener);
-
-                                // dialogSubscription.show();
-
 
                             }
                         });
@@ -471,40 +556,47 @@ public class RecordingActivity extends Activity {
                 } else {
                     Log.e("3", "3");
                     if (db.getRecordCount() >= 3) {
-                        stopFunction();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(RecordingActivity.this);
+
+
+                        //if (recordingHelpers.isPlaying)
+                        //stopFunction();
+                        AlertDialog.Builder builder = new
+                                AlertDialog.Builder(RecordingActivity.this);
                         builder.setTitle("Limit Exceeds");
                         builder.setCancelable(false);
                         builder.setMessage("Unlock the limit for unlimited recording");
-                        builder.setPositiveButton(android.R.string.ok, null);
+                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogCount =0;
+                                //play_btn.performClick();
+                            }
+                        });
+
                         builder.setNegativeButton("Unlock", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 /*mHelper.launchPurchaseFlow(RecordingActivity.this, ITEM_SKU, 10001,
                                         mPurchaseFinishedListener, "mypurchasetoken");*/
+                                dialogCount =0;
 
                                 List additionalSkuList = new ArrayList();
                                 additionalSkuList.add(ITEM_SKU_50_SNIPPETS);
                                 additionalSkuList.add(ITEM_SKU_200_SNIPPETS);
                                 additionalSkuList.add(ITEM_SKU_UNLIMITED_SNIPPETS);
-
                                 mHelper.queryInventoryAsync(true, additionalSkuList,
                                         mReceivedInventoryListener);
-
-
-                                // dialogSubscription.show();
-
-
                             }
                         });
-                        builder.show();
+                        ++dialogCount;
+                        if (dialogCount == 1)
+                            builder.show();
+
+
                     } else {
                         new RecordTask().execute();
                     }
                 }
-
-
-
 
                /* if (listRecords.size() >= 3) {
                     stopFunction();
@@ -516,9 +608,6 @@ public class RecordingActivity extends Activity {
                     builder.setNegativeButton("Unlock", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
-
-
                         }
                     });
 
@@ -530,11 +619,14 @@ public class RecordingActivity extends Activity {
 
             }
         });
+
+
         stop_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                stopFunction();
+                Log.i("vabhi","StopButon");
+                if (recordingHelpers.isPlaying)
+                    stopFunction();
 
             }
         });
@@ -575,6 +667,7 @@ public class RecordingActivity extends Activity {
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
+                                        linkDelete.add(listRecords.get(position).getPath());
                                         new DeleteData().execute(listRecords.get(position).getId());
                                     }
                                 })
@@ -611,8 +704,12 @@ public class RecordingActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        Log.i("vabhi","mHelper : "+mHelper);
+
         if (mHelper != null) mHelper.dispose();
         mHelper = null;
+
 
         if (recordingHelpers.isRunning()) {
             stopFunction();
@@ -766,7 +863,9 @@ public class RecordingActivity extends Activity {
     /**
      * playFunction to start recording and disable/enable buttons
      */
-    private void playFunction() {
+    private void playFunction(int i) {
+
+
         play_btn.setAlpha(0.5f);
         record_btn.setAlpha(1.0f);
         stop_btn.setAlpha(1.0f);
@@ -775,27 +874,30 @@ public class RecordingActivity extends Activity {
         stop_btn.setEnabled(true);
         recordingHelpers.startRecording(tempFilePath);
         recordingHelpers.setTimeStarts();
+
         handler.postDelayed(runnable, recordDuration);
         tExtStatus.setText(TAG_MONITORING);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-
     }
 
     /**
      * stopFunction to stop recording and disable/enable buttons
      */
     private void stopFunction() {
-
-        play_btn.setAlpha(1.0f);
-        record_btn.setAlpha(0.5f);
-        stop_btn.setAlpha(0.5f);
-        play_btn.setEnabled(true);
-        record_btn.setEnabled(false);
-        stop_btn.setEnabled(false);
-        handler.removeCallbacks(runnable);
-        recordingHelpers.stopRecording();
-        tExtStatus.setText(TAG_NO_ACTION);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        try {
+            play_btn.setAlpha(1.0f);
+            record_btn.setAlpha(0.5f);
+            stop_btn.setAlpha(0.5f);
+            play_btn.setEnabled(true);
+            record_btn.setEnabled(false);
+            stop_btn.setEnabled(false);
+            handler.removeCallbacks(runnable);
+            recordingHelpers.stopRecording();
+            tExtStatus.setText(TAG_NO_ACTION);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -821,8 +923,6 @@ public class RecordingActivity extends Activity {
 
                     } else {
                         mDBApi.getSession().startOAuth2Authentication(RecordingActivity.this);
-
-
                     }
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(RecordingActivity.this);
@@ -840,10 +940,7 @@ public class RecordingActivity extends Activity {
                 builder.setPositiveButton(android.R.string.ok, null);
                 builder.show();
             }
-
-
         }
-
 
     }
 
@@ -854,6 +951,9 @@ public class RecordingActivity extends Activity {
     private class RecordTask extends AsyncTask<Void, Void, Void> {
 
         private ProgressDialog pDailog;
+        String fileName;
+        String filePath;
+
 
         @Override
         protected void onPreExecute() {
@@ -863,8 +963,23 @@ public class RecordingActivity extends Activity {
             pDailog.setMessage("Storing");
             pDailog.show();
             record_btn.setEnabled(false);
+
+            overlayingTapToStopTextView.setEnabled(false);
+            overlayingstopImageButton.setEnabled(false);
+            overlayingListeningImageView.setEnabled(false);
+            overlayingBigIconImageView.setEnabled(false);
+            overlayingLinearLayout.setEnabled(false);
+            earButton.setEnabled(false);
+
             progressBar.setVisibility(ProgressBar.VISIBLE);
-            recordingHelpers.stopRecording();
+
+            try {
+                if (recordingHelpers.isPlaying)
+                    recordingHelpers.stopRecording();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
             handler.removeCallbacks(runnable);
             tExtStatus.setText(TAG_STORING);
             //Toast.makeText(getApplicationContext(),""+db.getLastRecordId(),Toast.LENGTH_LONG).show();
@@ -874,37 +989,67 @@ public class RecordingActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-
-                String fileName = "AudioNotes-" + (db.getLastRecordId() + 1);
-                String filePath = recordingHelpers.generateFilePath(folderName, fileName);
+                fileName = "AudioNotes-" + (db.getLastRecordId() + 1);
+                filePath = recordingHelpers.generateFilePath(folderName, fileName);
                 recordingHelpers.copyFile(tempFilePath, filePath);
+
+                MediaMetadataRetriever metaRetriver;
+                metaRetriver = new MediaMetadataRetriever();
+                metaRetriver.setDataSource(filePath);
+                String durationText = metaRetriver
+                        .extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                Log.e("duration",">>>>>>>>>>>>"+durationText);
+                String val = String.valueOf(Integer.parseInt(durationText) / 1000);
+
+
+                val = Integer.parseInt(val)<10?"0"+(String)val:""+(String)val;
+                Log.e("permannent duration",">>>>>>>>>>>>"+val);
+
                 ModelRecording models = new ModelRecording();
                 models.setName(fileName);
                 models.setDate(recordingHelpers.getCurrentDateTime("dd/MM/yyyy"));
                 models.setTime(recordingHelpers.getCurrentDateTime("hh:mm aa"));
                 models.setDuration(recordingHelpers.getElapseTime());
+                //models.setDuration(val);
                 models.setPath(filePath);
                 models.setFolder(folderName);
                 db.addRecord(models);
-                Log.e("Timer<><><><>", recordingHelpers.getElapseTime());
+
+                //Log.e("Timer<><><><>", recordingHelpers.getElapseTime());
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             return null;
+
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            pDailog.dismiss();
-            record_btn.setEnabled(true);
-            recordingHelpers.setTimeStarts();
-            recordingHelpers.startRecording(tempFilePath);
-            handler.postDelayed(runnable, recordDuration);
-            progressBar.setVisibility(ProgressBar.GONE);
-            tExtStatus.setText(TAG_MONITORING);
-            new FetchDataBase().execute();
+            try {
+
+
+                pDailog.dismiss();
+
+                record_btn.setEnabled(true);
+                recordingHelpers.setTimeStarts();
+                recordingHelpers.startRecording(tempFilePath);
+                handler.postDelayed(runnable, recordDuration);
+                progressBar.setVisibility(ProgressBar.GONE);
+                tExtStatus.setText(TAG_MONITORING);
+                new FetchDataBase().execute();
+
+                overlayingTapToStopTextView.setEnabled(true);
+                overlayingstopImageButton.setEnabled(true);
+                overlayingListeningImageView.setEnabled(true);
+                overlayingBigIconImageView.setEnabled(true);
+                overlayingLinearLayout.setEnabled(true);
+
+                earButton.setEnabled(true);   // earButton is not in Overlaying layout
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -922,25 +1067,25 @@ public class RecordingActivity extends Activity {
             listRecords = new ArrayList<ModelRecording>();
             listRecords.clear();
             idsDelete.clear();
+            linkDelete.clear();
 
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-
             listRecords = db.getAllRecordsFromFolder(folderName);
-
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            adapterRecordingFolder = new AdapterRecordingFolder(RecordingActivity.this, listRecords, RecordingActivity.this);
+
             textEmpty.setVisibility(TextView.VISIBLE);
-            mListView.setAdapter(new AdapterRecordingFolder(RecordingActivity.this, listRecords, RecordingActivity.this));
+            mListView.setAdapter(adapterRecordingFolder);
             mListView.setEmptyView(textEmpty);
             progressBar.setVisibility(ProgressBar.GONE);
-
         }
     }
 
@@ -972,10 +1117,12 @@ public class RecordingActivity extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
             progressBar.setVisibility(ProgressBar.GONE);
             new FetchDataBase().execute();
         }
     }
+
 
 
 }

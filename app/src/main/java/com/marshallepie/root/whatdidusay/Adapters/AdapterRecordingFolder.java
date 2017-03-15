@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.marshallepie.root.whatdidusay.Activities.RecordingActivity;
 import com.marshallepie.root.whatdidusay.Database.DataBaseHelper;
 import com.marshallepie.root.whatdidusay.Helpers.RecordingHelpers;
+import com.marshallepie.root.whatdidusay.Interfaces.EarButtonInterface;
 import com.marshallepie.root.whatdidusay.Models.ModelRecording;
 import com.marshallepie.root.whatdidusay.R;
 
@@ -44,11 +45,17 @@ public class AdapterRecordingFolder extends BaseAdapter {
     private RecordingHelpers recordingHelpers;
     private Boolean statusPlaying;
     private int idSongPlaying;
+    boolean isAudioMusicPlaying;
     private MediaPlayer mPlayer = null;
     private RecordingActivity recordingActivity;
-    private String [] exportMenuArray = {"Text" ,"Mail","DropBox"};
+    private String[] exportMenuArray = {"Text", "Mail", "DropBox"};
+
+    EarButtonInterface earButtonInterface;
+
 
     public AdapterRecordingFolder(Context c, ArrayList<ModelRecording> list, RecordingActivity activity) {
+
+
         mContext = c;
         inflater = LayoutInflater.from(c);
         mList = list;
@@ -56,6 +63,10 @@ public class AdapterRecordingFolder extends BaseAdapter {
         statusPlaying = false;
         db = new DataBaseHelper(mContext);
         recordingHelpers = new RecordingHelpers();
+
+        earButtonInterface = (EarButtonInterface) c;
+
+
     }
 
     @Override
@@ -114,41 +125,16 @@ public class AdapterRecordingFolder extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-               int pos = Integer.parseInt(v.getTag().toString());
+                int pos = Integer.parseInt(v.getTag().toString());
                 showInputDialog(pos);
 
             }
         });
+
+        PlayPauseButtonListener listener = new PlayPauseButtonListener(holder);
+
         holder.play_tracklist_btn.setTag(position);
-        holder.play_tracklist_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Integer pos = Integer.parseInt(v.getTag().toString());
-
-                if(statusPlaying){
-                    //true
-                    if (pos == idSongPlaying){
-                        statusPlaying = false;
-                        if (mList.get(pos).isPlaying()) {
-                            stopPlaying();
-                            mList.get(idSongPlaying).setIsPlaying(false);
-                            holder.play_tracklist_btn.setImageResource(R.drawable.play_btn);
-                        }
-                    }
-                }
-                else {
-                    //false
-                    statusPlaying = true;
-                    idSongPlaying = pos;
-                    holder.play_tracklist_btn.setImageResource(R.drawable.pause_btn);
-                    mList.get(idSongPlaying).setIsPlaying(true);
-                    startPlaying(mList.get(idSongPlaying).getPath(), holder.play_tracklist_btn);
-
-                }
-
-            }
-        });
-
+        holder.play_tracklist_btn.setOnClickListener(listener);
         holder.button_delete.setTag(position);
         holder.button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +156,7 @@ public class AdapterRecordingFolder extends BaseAdapter {
         });
 
         if (mList.get(position).isPlaying()) {
+
             holder.button_delete.setImageResource(R.drawable.pause_btn);
         } else {
             holder.button_delete.setImageResource(R.drawable.play_btn);
@@ -181,32 +168,19 @@ public class AdapterRecordingFolder extends BaseAdapter {
             holder.button_delete.setImageResource(R.drawable.ic_delete_uncheck);
         }
 
-
-
-
-       /* if (!mList.get(position).getName().equals("")) {
-            holder.title_tracklist.setText(mList.get(position).getName());
-        } else {
-            String titlePosition = "";
-            if (position<9){
-                titlePosition = "0"+(position+1);
-            }
-            else {
-                titlePosition = ""+(position+1);
-            }
-
-            holder.title_tracklist.setText("Snippet " + titlePosition);
-        }*/
-
         holder.title_tracklist.setText(mList.get(position).getName());
         holder.date_text.setText(mList.get(position).getDate());
-        holder.time_text.setText(" "+mList.get(position).getTime());
-        holder.record_time.setText(mList.get(position).getDuration());
+        holder.time_text.setText(" " + mList.get(position).getTime());
+        //Log.e("time", ">>>>>>" + mList.get(position).getDuration());
+        String[] split = mList.get(position).getDuration().split(":");
+        //Log.e("split", ">>>>>>" + split[0] + " :" + split[1]);
+        holder.record_time.setText(split[1] + " secs");
 
         return v;
     }
 
     public void startPlaying(String mFileName, final ImageView playImage) {
+        isAudioMusicPlaying = true;
         mPlayer = new MediaPlayer();
         try {
             mPlayer.setDataSource(mFileName);
@@ -215,6 +189,7 @@ public class AdapterRecordingFolder extends BaseAdapter {
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
+                    earButtonInterface.enableEarButton();
                     playImage.setImageResource(play_btn);
                     statusPlaying = false;
                     mList.get(idSongPlaying).setIsPlaying(false);
@@ -227,8 +202,10 @@ public class AdapterRecordingFolder extends BaseAdapter {
 
     public void stopPlaying() {
         mPlayer.release();
+        isAudioMusicPlaying = false;
         mPlayer = null;
     }
+
 
     private class SettingHolder {
         ImageView play_tracklist_btn, button_delete;
@@ -279,17 +256,16 @@ public class AdapterRecordingFolder extends BaseAdapter {
         alert.show();
     }
 
-    private void showShareDialog(final int position){
+    private void showShareDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle("Export Your Recording")
                 .setItems(exportMenuArray, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
+                        switch (which) {
                             case 0:
 
 
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                                {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(mContext);
 
                                     Intent sendIntent = new Intent(Intent.ACTION_SEND);
@@ -297,15 +273,12 @@ public class AdapterRecordingFolder extends BaseAdapter {
                                     sendIntent.putExtra(Intent.EXTRA_TEXT, "What Did You Say App - Recording");
                                     sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mList.get(position).getPath())));
 
-                                    if (defaultSmsPackageName != null)
-                                    {
+                                    if (defaultSmsPackageName != null) {
                                         sendIntent.setPackage(defaultSmsPackageName);
                                     }
                                     mContext.startActivity(sendIntent);
 
-                                }
-                                else
-                                {
+                                } else {
 
                                     Intent intent = new Intent(Intent.ACTION_SEND);
                                     intent.putExtra("sms_body", "What Did You Say App - Recording");
@@ -314,9 +287,8 @@ public class AdapterRecordingFolder extends BaseAdapter {
                                     intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mList.get(position).getPath())));
                                     if (intent.resolveActivity(mContext.getPackageManager()) != null) {
                                         mContext.startActivity(intent);
-                                    }
-                                    else {
-                                        Toast.makeText(mContext,"Cannot Support MMS",Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(mContext, "Cannot Support MMS", Toast.LENGTH_SHORT).show();
                                     }
 
 
@@ -327,16 +299,15 @@ public class AdapterRecordingFolder extends BaseAdapter {
                             case 1:
                                 try {
 
-                                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                                sendIntent.setType("plain/text");
-                                sendIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
-                                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "What Did You Say App - Recording");
-                                sendIntent.putExtra(Intent.EXTRA_TEXT, "");
-                                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mList.get(position).getPath())));
-                                mContext.startActivity(sendIntent);
+                                    Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                                    sendIntent.setType("plain/text");
+                                    sendIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
+                                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "What Did You Say App - Recording");
+                                    sendIntent.putExtra(Intent.EXTRA_TEXT, "");
+                                    sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mList.get(position).getPath())));
+                                    mContext.startActivity(sendIntent);
 
-                                }
-                                catch (Exception e){
+                                } catch (Exception e) {
                                     Intent intent = new Intent(Intent.ACTION_SEND);
                                     intent.setType("text/plain");
                                     intent.putExtra(Intent.EXTRA_SUBJECT, "What Did You Say App - Recording");
@@ -385,5 +356,48 @@ public class AdapterRecordingFolder extends BaseAdapter {
     }
 
 
+    class PlayPauseButtonListener implements View.OnClickListener {
+        SettingHolder holder;
+
+        public PlayPauseButtonListener(SettingHolder holder) {
+            this.holder = holder;
+        }
+
+        @Override
+        public void onClick(View view) {
+            Integer pos = Integer.parseInt(view.getTag().toString());
+
+            if (statusPlaying) {
+                earButtonInterface.enableEarButton();
+
+                Log.i("vabhi", "in onCLick playing : " + pos);
+                if (pos == idSongPlaying) {
+                    statusPlaying = false;
+                    if (mList.get(pos).isPlaying()) {
+                        stopPlaying();
+                        mList.get(idSongPlaying).setIsPlaying(false);
+                        holder.play_tracklist_btn.setImageResource(R.drawable.play_btn);
+                    }
+                }
+            } else {
+                //false
+                //Log.i("vabhi","not playing");
+                // earButtonInterface.disableEarButton();
+                Log.i("vabhi", "in onCLick pause : " + pos);
+                earButtonInterface.disableEarButton();
+
+                statusPlaying = true;
+                idSongPlaying = pos;
+                holder.play_tracklist_btn.setImageResource(R.drawable.pause_btn);
+
+                mList.get(idSongPlaying).setIsPlaying(true);
+                startPlaying(mList.get(idSongPlaying).getPath(), holder.play_tracklist_btn);
+
+            }
+        }
+
+    }  // End of ListenerPlayPauseButton
 
 }
+
+

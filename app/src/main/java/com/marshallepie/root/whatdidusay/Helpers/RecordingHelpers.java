@@ -25,10 +25,12 @@ public class RecordingHelpers {
     private MediaRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
 
+    public Boolean isPlaying = false;
+
     private final String TEMP_FOLDER = "";
-    private  String mainDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
+    private String mainDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
             + ".What_did_you_say";
-    private  String tempDir = mainDir+File.separator+"Temp";
+    private String tempDir = mainDir + File.separator + "Temp";
     private long startTime;
 
     /*public RecordingHelpers(Context context) {
@@ -47,13 +49,14 @@ public class RecordingHelpers {
 
     }
 */
+
     public RecordingHelpers() {
         File dirFile = new File(mainDir);
         File tempDirFile = new File(tempDir);
-        if (!dirFile.exists()){
+        if (!dirFile.exists()) {
             dirFile.mkdirs();
         }
-        if (!tempDirFile.exists()){
+        if (!tempDirFile.exists()) {
             tempDirFile.mkdirs();
         }
 
@@ -61,28 +64,28 @@ public class RecordingHelpers {
 
     public String generateFilePath() {
         String mFileName;
-        mFileName = mainDir +File.separator + System.currentTimeMillis() + ".3gp";
+        mFileName = mainDir + File.separator + System.currentTimeMillis() + ".3gp";
         return mFileName;
     }
 
-    public String generateFilePath(String folderName,String fileName) {
+    public String generateFilePath(String folderName, String fileName) {
         String mFileName;
-        mFileName = mainDir +File.separator +"Groups" +File.separator+folderName +File.separator+ fileName + ".3gp";
+        mFileName = mainDir + File.separator + "Groups" + File.separator + folderName + File.separator + fileName + ".3gp";
         return mFileName;
     }
 
-    public String getTempFilePath(){
+    public String getTempFilePath() {
 
         String mFileName;
-        mFileName = tempDir +File.separator+"temp.3gp";
+        mFileName = tempDir + File.separator + "temp.3gp";
 
         return mFileName;
 
 
     }
-
 
     public void startRecording(String mFileName) {
+        isPlaying = true;
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -100,9 +103,14 @@ public class RecordingHelpers {
     }
 
     public void stopRecording() {
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
+        try {
+            isPlaying = false;
+            mRecorder.stop();
+            mRecorder.release();
+            mRecorder = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -129,13 +137,13 @@ public class RecordingHelpers {
     }
 
 
-    public boolean isRunning(){
+    public boolean isRunning() {
 
         boolean status;
 
-        if(mRecorder == null){
+        if (mRecorder == null) {
             status = false;
-        }else{
+        } else {
             status = true;
         }
 
@@ -143,42 +151,52 @@ public class RecordingHelpers {
 
     }
 
-    public void moveIn (String pathInternal, String pathExternal) {
-        File fInternal = new File (pathInternal);
-        File fExternal = new File (pathExternal);
+    public void moveIn(String pathInternal, String pathExternal) {
+        File fInternal = new File(pathInternal);
+        File fExternal = new File(pathExternal);
         if (fInternal.exists()) {
             fInternal.renameTo(fExternal);
         }
     }
 
-    public  void copyFile(String sourceFilePath, String destFilePath) throws IOException {
+    public void copyFile(String sourceFilePath, String destFilePath) throws IOException {
 
-        File oldFile = new File (sourceFilePath);
-        Log.e("source path",sourceFilePath);
+        File oldFile = new File(sourceFilePath);
+        Log.e("source path", sourceFilePath);
         File newFile = new File(destFilePath);
-        Log.e("destincation path",destFilePath);
+        Log.e("destincation path", destFilePath);
         oldFile.renameTo(newFile);
 
     }
-    public String getCurrentDateTime(String format){
+
+    public String getCurrentDateTime(String format) {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(cal.getTime());
     }
 
-    public void setTimeStarts(){
+    public void setTimeStarts() {
         startTime = 0;
         startTime = System.currentTimeMillis();
     }
-    public String getElapseTime(){
+
+    public String getElapseTime() {
         long tEnd = System.currentTimeMillis();
         long tDelta = tEnd - startTime;
         double elapsedSeconds = tDelta / 1000.0;
-        String timeString;
-        timeString = elapsedSeconds<10?"0"+(int)elapsedSeconds:""+(int)elapsedSeconds;
-        return "00:"+timeString;
-    }
+        String value = Double.toString(elapsedSeconds);
+        //Log.e("value",">>>>>>"+String.valueOf(tDelta).substring(1));
+        if (Integer.parseInt(String.valueOf(tDelta).substring(1)) < 500) {
+            //Log.e("value less 500",">>>>>>");
+            elapsedSeconds = Integer.parseInt(String.valueOf(String.valueOf(tDelta).charAt(0))) - 1;
+        }
 
+        String seconds = String.valueOf((elapsedSeconds % 60000) / 1000);
+        //Log.e("elasped value",">>>>>>"+elapsedSeconds +" delta" +tDelta +" seconds"+seconds);
+        String timeString;
+        timeString = elapsedSeconds < 10 ? "0" + (int) elapsedSeconds : "" + (int) elapsedSeconds;
+        return "00:" + timeString;
+    }
 
 
 }
